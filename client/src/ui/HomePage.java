@@ -53,36 +53,28 @@ public class HomePage extends JFrame
 
     private List<Author>                 authors;
     private List<Publisher>              publisher;
-
-    private JTextField                   txtNameEdit;
-    private JComboBox<String>            cbAuthorEdit;
-    private JComboBox<String>            cbPublisherEdit;
-    private JTextArea                    txtDescriptionEdit;
     private JButton                      btnSave;
-    private JLabel                       lbNameEdit;
-    private JLabel                       lbAuthorEdit;
-    private JLabel                       lbPublisherEdit;
-    private JLabel                       lbDescriptionEdit;
-    private DefaultComboBoxModel<String> cbAuthorModelEdit;
-    private DefaultComboBoxModel<String> cbPublisherModelEdit;
-
     private Map<String, Integer>         authorsMap;
     private Map<String, Integer>         publisherMap;
 
     private Book                         currentEdit;
     private boolean                      isAdmin          = false;
-    private LoginPage                    loginPage;
     private JButton                      btnLogout;
     private JLabel                       error;
 
     private JTextField                   txtSearch;
     private JButton                      btnSearch;
     private CheckBoxRenderer             authorRenderer;
-    private CheckBoxRenderer             authorEditRenderer;
 
     private JComboBox<String>            cbAuthorFilter;
     private DefaultComboBoxModel<String> cbAuthorModelFilter;
     private DirectController             controller;
+    private JButton                      btnDelete;
+
+    private JLabel                       lbName;
+    private JLabel                       lbAuthor;
+    private JLabel                       lbPublisher;
+    private JLabel                       lbDescription;
 
     /**
      * Create the frame.
@@ -96,7 +88,6 @@ public class HomePage extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
-//        setSize(800, 550);
         setBounds(300, 300, 800, 550);
 
         // search layout
@@ -113,19 +104,19 @@ public class HomePage extends JFrame
         // -------------------------------------
         model = new DefaultTableModel();
         tblBook = new JTable(model);
-        tblBook.setEnabled(false);
+
         // Table show books
         JScrollPane pane = new JScrollPane(tblBook);
-        pane.setBounds(0, 20, 800, 220);
+        pane.setBounds(0, 20, 800, 200);
 
         // add book layout
-        JLabel lbName = new JLabel("Name");
+        lbName = new JLabel("Name");
         lbName.setBounds(10, 260, 80, 20);
-        JLabel lbAuthor = new JLabel("Author");
+        lbAuthor = new JLabel("Author");
         lbAuthor.setBounds(10, 290, 80, 20);
-        JLabel lbPublisher = new JLabel("Publisher");
+        lbPublisher = new JLabel("Publisher");
         lbPublisher.setBounds(10, 320, 80, 20);
-        JLabel lbDescription = new JLabel("Description");
+        lbDescription = new JLabel("Description");
         lbDescription.setBounds(10, 350, 80, 20);
 
         txtName = new JTextField();
@@ -154,47 +145,13 @@ public class HomePage extends JFrame
         txtDescription.setBounds(100, 350, 200, 50);
 
         btnCreate = new JButton("Add");
-        btnCreate.setBounds(100, 410, 80, 20);
-        btnCreate.setEnabled(isAdmin);
-
-        // Edit book layout
-        lbNameEdit = new JLabel("Name");
-        lbNameEdit.setBounds(350, 260, 80, 20);
-        lbAuthorEdit = new JLabel("Author");
-        lbAuthorEdit.setBounds(350, 290, 80, 20);
-        lbPublisherEdit = new JLabel("Publisher");
-        lbPublisherEdit.setBounds(350, 320, 80, 20);
-        lbDescriptionEdit = new JLabel("Description");
-        lbDescriptionEdit.setBounds(350, 350, 80, 20);
-
-        txtNameEdit = new JTextField();
-        txtNameEdit.setBounds(450, 260, 200, 20);
-
-        cbAuthorModelEdit = new DefaultComboBoxModel<String>();
-        cbAuthorEdit = new JComboBox<>()
-        {
-
-            @Override
-            public void setPopupVisible(boolean v)
-            {
-                if (v)
-                    super.setPopupVisible(v);
-            }
-
-        };
-        ;
-        cbAuthorEdit.setModel(cbAuthorModelEdit);
-        cbAuthorEdit.setBounds(450, 290, 200, 20);
-
-        cbPublisherModelEdit = new DefaultComboBoxModel<String>();
-        cbPublisherEdit = new JComboBox<>();
-        cbPublisherEdit.setModel(cbPublisherModelEdit);
-        cbPublisherEdit.setBounds(450, 320, 200, 20);
-        txtDescriptionEdit = new JTextArea();
-        txtDescriptionEdit.setBounds(450, 350, 200, 50);
+        btnCreate.setBounds(450, 260, 80, 20);
 
         btnSave = new JButton("Save");
-        btnSave.setBounds(450, 410, 80, 20);
+        btnSave.setBounds(450, 300, 80, 20);
+
+        btnDelete = new JButton("Delete");
+        btnDelete.setBounds(450, 340, 80, 20);
 
         error = new JLabel("Error");
         error.setBounds(300, 430, 200, 20);
@@ -203,6 +160,7 @@ public class HomePage extends JFrame
         btnLogout = new JButton("Logout");
         btnLogout.setBounds(300, 450, 80, 20);
 
+        setVisibleLayout(isAdmin);
         add(txtSearch);
         add(cbAuthorFilter);
         add(btnSearch);
@@ -219,19 +177,11 @@ public class HomePage extends JFrame
         add(txtDescription);
         add(btnCreate);
 
-        add(lbNameEdit);
-        add(txtNameEdit);
-        add(lbAuthorEdit);
-        add(cbAuthorEdit);
-        add(lbPublisherEdit);
-        add(cbPublisherEdit);
-        add(lbDescriptionEdit);
-        add(txtDescriptionEdit);
         add(btnSave);
+        add(btnDelete);
 
         add(btnLogout);
         add(error);
-        setVisibleLayout(false);
         getBooks();
         addListner();
         initData();
@@ -239,15 +189,18 @@ public class HomePage extends JFrame
 
     private void setVisibleLayout(boolean x)
     {
-        lbNameEdit.setVisible(x);
-        txtNameEdit.setVisible(x);
-        lbAuthorEdit.setVisible(x);
-        cbAuthorEdit.setVisible(x);
-        lbPublisherEdit.setVisible(x);
-        cbPublisherEdit.setVisible(x);
-        lbDescriptionEdit.setVisible(x);
-        txtDescriptionEdit.setVisible(x);
+        lbName.setVisible(x);
+        txtName.setVisible(x);
+        lbAuthor.setVisible(x);
+        cbAuthor.setVisible(x);
+        lbPublisher.setVisible(x);
+        cbPublisher.setVisible(x);
+        lbDescription.setVisible(x);
+        txtDescription.setVisible(x);
         btnSave.setVisible(x);
+        btnCreate.setVisible(x);
+        btnDelete.setVisible(x);
+        tblBook.setEnabled(x);
     }
 
     private void initData()
@@ -261,7 +214,6 @@ public class HomePage extends JFrame
         for (int x = 0; x < authors.size(); x++)
         {
             cbAuthorModel.addElement(authors.get(x).getName());
-            cbAuthorModelEdit.addElement(authors.get(x).getName());
             cbAuthorModelFilter.addElement(authors.get(x).getName());
             authorString.add(authors.get(x).getName());
             authorsMap.put(authors.get(x).getName(), authors.get(x).getId());
@@ -270,7 +222,6 @@ public class HomePage extends JFrame
         for (int x = 0; x < publisher.size(); x++)
         {
             cbPublisherModel.addElement(publisher.get(x).getName());
-            cbPublisherModelEdit.addElement(publisher.get(x).getName());
             publisherMap.put(publisher.get(x).getName(), publisher.get(x).getId());
         }
 
@@ -278,39 +229,15 @@ public class HomePage extends JFrame
         cbAuthor.setRenderer(authorRenderer);
         cbAuthor.addItemListener(e -> {
             String item = (String) e.getItem();
-//            System.out.println("Event click: " + e.paramString());
-//            System.out.println("----------------------");
             if (e.getStateChange() == ItemEvent.SELECTED)
             {
                 authorRenderer.setSelected(item);
-            }
-
-        });
-//        cbAuthor.addItemListener(new ItemListener()
-//        {
-//
-//            @Override
-//            public void itemStateChanged(ItemEvent e)
-//            {
-//                // TODO Auto-generated method stub
-//                System.out.println("Event: " + e.getStateChange());
-//            }
-//        });
-
-        authorEditRenderer = new CheckBoxRenderer(authorString);
-        cbAuthorEdit.setRenderer(authorEditRenderer);
-        cbAuthorEdit.addItemListener(e -> {
-            String item = (String) e.getItem();
-            if (e.getStateChange() == ItemEvent.SELECTED)
-            {
-                authorEditRenderer.setSelected(item);
             }
         });
     }
 
     private void getBooks()
     {
-
         books = sv.getBooks();
         initTable();
     }
@@ -321,8 +248,7 @@ public class HomePage extends JFrame
         {
             model.removeRow(i);
         }
-
-        String[] columnName = { "BookId", "Name", "Author", "Publisher", "Description", "Edit", "Delete" };
+        String[] columnName = { "BookId", "Name", "Author", "Publisher", "Description" };
         model.setColumnIdentifiers(columnName);
         int count = 0;
         for (Book book : books)
@@ -333,26 +259,14 @@ public class HomePage extends JFrame
             row[2] = book.getAuthor();
             row[3] = book.getPublisher();
             row[4] = book.getDescription();
-            JButton x = new JButton("Edit");
-            x.setEnabled(isAdmin);
-            row[5] = x;
-            JButton y = new JButton("Delete");
-            y.setEnabled(isAdmin);
-            row[6] = y;
             model.insertRow(count++, row);
         }
-
-        TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-        tblBook.getColumn("Edit").setCellRenderer(buttonRenderer);
-        tblBook.getColumn("Delete").setCellRenderer(buttonRenderer);
-
     }
 
     private void addListner()
     {
         btnLogout.addActionListener(new ActionListener()
         {
-
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -361,24 +275,23 @@ public class HomePage extends JFrame
         });
         btnSave.addActionListener(new ActionListener()
         {
-
             @Override
             public void actionPerformed(ActionEvent e)
             {
                 int bookId = currentEdit.getId();
-                String name = txtNameEdit.getText().trim();
+                String name = txtName.getText().trim();
                 if (name.length() > 0)
                 {
                     List<Integer> authorIds = new ArrayList<>();
-                    List<String> authorName = authorEditRenderer.getListSelected();
+                    List<String> authorName = authorRenderer.getListSelected();
                     for (String string : authorName)
                     {
                         authorIds.add(authorsMap.get(string));
                         System.out.println("Author Id: " + authorsMap.get(string));
                     }
 
-                    int publisherId = publisher.get(cbPublisherEdit.getSelectedIndex()).getId();
-                    String description = txtDescriptionEdit.getText();
+                    int publisherId = publisher.get(cbPublisher.getSelectedIndex()).getId();
+                    String description = txtDescription.getText();
                     Book dto = new Book(bookId, name, "", "", description);
                     dto.setPublisherId(publisherId);
                     dto.setAuthorId(authorIds);
@@ -390,7 +303,6 @@ public class HomePage extends JFrame
                             System.out.println("Update Book Author successful");
                         System.out.println("Update Book successful");
                         getBooks();
-                        setVisibleLayout(false);
                     }
                     error.setVisible(false);
                 }
@@ -399,7 +311,6 @@ public class HomePage extends JFrame
                     error.setText("Book name can not be empty");
                     error.setVisible(true);
                 }
-
             }
         });
         btnCreate.addActionListener(new ActionListener()
@@ -425,6 +336,7 @@ public class HomePage extends JFrame
                     boolean rs = sv.addBook(dto);
                     if (rs)
                     {
+                        System.out.println("Add new book successful");
                         getBooks();
                     }
                     error.setVisible(false);
@@ -455,7 +367,19 @@ public class HomePage extends JFrame
                     books = bookSearchs;
                     initTable();
                 }
+            }
+        });
+        btnDelete.addActionListener(new ActionListener()
+        {
 
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                boolean rs = sv.deleteBook(currentEdit.getId());
+                if (rs)
+                {
+                    getBooks();
+                }
             }
         });
         tblBook.addMouseListener(new MouseListener()
@@ -473,35 +397,20 @@ public class HomePage extends JFrame
             {
                 if (isAdmin)
                 {
-                    int column = tblBook.getColumnModel().getColumnIndexAtX(e.getX());
                     int row = e.getY() / tblBook.getRowHeight();
-                    if (column == 5 && (row >= 0 && row < tblBook.getRowCount()))
-                    {
-                        setVisibleLayout(true);
-                        currentEdit = books.get(row);
-                        txtNameEdit.setText(books.get(row).getName());
+                    currentEdit = books.get(row);
+                    txtName.setText(books.get(row).getName());
 
-                        List<Integer> authorIds = books.get(row).getAuthorId();
-                        Map<Integer, String> authorMap = sv.getAuthorMap();
-                        List<String> authorsName = new ArrayList<>();
-                        for (Integer id : authorIds)
-                        {
-                            authorsName.add(authorMap.get(id));
-                        }
-                        authorEditRenderer.setSelectedList(authorsName);
-                        cbPublisherEdit.setSelectedIndex(publisherMap.get(books.get(row).getPublisher().trim()));
-                        txtDescriptionEdit.setText(books.get(row).getDescription());
-
-                    }
-                    else if (column == 6 && (row >= 0 && row < tblBook.getRowCount()))
+                    List<Integer> authorIds = books.get(row).getAuthorId();
+                    Map<Integer, String> authorMap = sv.getAuthorMap();
+                    List<String> authorsName = new ArrayList<>();
+                    for (Integer id : authorIds)
                     {
-                        System.out.println("Delete button");
-                        boolean rs = sv.deleteBook(Integer.parseInt(model.getValueAt(row, 0).toString()));
-                        if (rs)
-                        {
-                            model.removeRow(row);
-                        }
+                        authorsName.add(authorMap.get(id));
                     }
+                    authorRenderer.setSelectedList(authorsName);
+                    cbPublisher.setSelectedIndex(publisherMap.get(books.get(row).getPublisher().trim()));
+                    txtDescription.setText(books.get(row).getDescription());
                 }
             }
 

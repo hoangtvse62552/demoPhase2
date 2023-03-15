@@ -257,9 +257,12 @@ public class BookController
 
     public boolean addBook(Book book)
     {
-        boolean result = false;
+        System.out.println("Add book controller");
+        boolean check1 = false;
+        boolean check2 = false;
         DBManager db = new DBManager();
         con = db.connectDB2();
+        int bookId = -1;
         if (con != null)
         {
             try
@@ -274,10 +277,14 @@ public class BookController
                 stm.setString(4, timeStamp);
                 stm.setInt(5, book.getPublisherId());
                 rs = stm.executeQuery();
-                if (rs.next())
+                if (rs != null)
                 {
-                    result = true;
-                    result = addAuthorBook(book.getId(), book.getAuthorId());
+                    if (rs.next())
+                    {
+                        check1 = true;
+                        bookId = rs.getInt("book_id");
+
+                    }
                 }
             }
             catch (Exception e)
@@ -289,7 +296,11 @@ public class BookController
                 closeConnection();
             }
         }
-        return result;
+        if (book.getAuthor() != null)
+        {
+            check2 = addAuthorBook(bookId, book.getAuthorId());
+        }
+        return (check1 & check2);
     }
 
     public boolean deleteBook(int id)
@@ -336,6 +347,7 @@ public class BookController
     {
         DBManager db = new DBManager();
         con = db.connectDB2();
+        System.out.println("add author book");
         if (con != null)
         {
             try
