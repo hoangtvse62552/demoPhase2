@@ -3,6 +3,7 @@ package controller;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ public class BookController
     private Map<Integer, String> authors   = new HashMap<>();
     private List<Publisher>      publisherList;
     private List<Author>         authorList;
+    private Map<Integer, Book>   bookMap;
 
     public BookController()
     {
@@ -235,16 +237,56 @@ public class BookController
                 stm.setString(3, timeStamp);
                 stm.setInt(4, book.getPublisherId());
                 stm.setInt(5, book.getId());
-                System.out.println(book.toString());
+//                System.out.println(book.toString());
                 int rs = stm.executeUpdate();
-                System.out.println("result of update book: " + rs);
-                if (rs == 1)
+//                System.out.println("result of update book: " + rs);
+                if (rs != -1)
                 {
-                    return true;
+                    String sql1 = "DELETE FROM DB2ADMIN.BOOK_AUTHORS WHERE BOOK_ID = ?";
+                    stm = con.prepareStatement(sql1);
+                    stm.setInt(1, book.getId());
+                    rs = stm.executeUpdate();
+                    System.out.println(book.getAuthorId().size());
+                    if (rs != -1)
+                    {
+                        for (Integer id : book.getAuthorId())
+                        {
+                            String sql2 = "INSERT INTO DB2ADMIN.BOOK_AUTHORS (AUTHOR_ID, BOOK_ID) VALUES(?, ?)";
+                            stm = con.prepareStatement(sql2);
+                            stm.setInt(1, id);
+                            stm.setInt(2, book.getId());
+                            rs = stm.executeUpdate();
+                            if (rs == -1)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
+                else
+                {
+                    return false;
+                }
+                con.commit();
             }
             catch (Exception e)
             {
+                if (con != null)
+                {
+                    try
+                    {
+                        System.err.print("Transaction is being rolled back");
+                        con.rollback();
+                    }
+                    catch (SQLException excep)
+                    {
+                        System.out.println(excep);
+                    }
+                }
                 e.printStackTrace();
             }
             finally
@@ -252,14 +294,13 @@ public class BookController
                 closeConnection();
             }
         }
-        return false;
+        return true;
     }
 
     public boolean addBook(Book book)
     {
         System.out.println("Add book controller");
-        boolean check1 = false;
-        boolean check2 = false;
+        boolean check = false;
         DBManager db = new DBManager();
         con = db.connectDB2();
         int bookId = -1;
@@ -281,14 +322,38 @@ public class BookController
                 {
                     if (rs.next())
                     {
-                        check1 = true;
                         bookId = rs.getInt("book_id");
-
+                        for (Integer id : book.getAuthorId())
+                        {
+                            String sql1 = "INSERT INTO DB2ADMIN.BOOK_AUTHORS (AUTHOR_ID, BOOK_ID) VALUES(?, ?)";
+                            stm = con.prepareStatement(sql1);
+                            stm.setInt(1, id);
+                            stm.setInt(2, bookId);
+                            int rs = stm.executeUpdate();
+                            if (rs != 1)
+                            {
+                                return false;
+                            }
+                        }
+                        check = true;
                     }
                 }
+                con.commit();
             }
             catch (Exception e)
             {
+                if (con != null)
+                {
+                    try
+                    {
+                        System.err.print("Transaction is being rolled back");
+                        con.rollback();
+                    }
+                    catch (SQLException excep)
+                    {
+                        System.out.println(excep);
+                    }
+                }
                 e.printStackTrace();
             }
             finally
@@ -296,11 +361,7 @@ public class BookController
                 closeConnection();
             }
         }
-        if (book.getAuthor() != null)
-        {
-            check2 = addAuthorBook(bookId, book.getAuthorId());
-        }
-        return (check1 & check2);
+        return check;
     }
 
     public boolean deleteBook(int id)
@@ -341,80 +402,6 @@ public class BookController
     public List<Author> getAuthorList()
     {
         return authorList;
-    }
-
-    public boolean addAuthorBook(int bookId, List<Integer> authorId)
-    {
-        DBManager db = new DBManager();
-        con = db.connectDB2();
-        System.out.println("add author book");
-        if (con != null)
-        {
-            try
-            {
-                if (authorId != null)
-                {
-                    for (Integer integer : authorId)
-                    {
-                        String sql = "INSERT INTO DB2ADMIN.BOOK_AUTHORS (AUTHOR_ID, BOOK_ID) VALUES(?, ?)";
-                        stm = con.prepareStatement(sql);
-                        stm.setInt(1, integer);
-                        stm.setInt(2, bookId);
-                        int rs = stm.executeUpdate();
-                        if (rs != 1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
-        return false;
-    }
-
-    public boolean updateAuthorBook(int bookId, List<Integer> authorIds)
-    {
-        DBManager db = new DBManager();
-        con = db.connectDB2();
-        boolean check = false;
-        if (con != null)
-        {
-            try
-            {
-//                String sql = "UPDATE DB2ADMIN.BOOK_AUTHORS SET AUTHOR_ID = ? WHERE AUTHOR_ID= ? AND BOOK_ID= ?";
-                String sql = "DELETE FROM DB2ADMIN.BOOK_AUTHORS WHERE BOOK_ID = ?";
-                stm = con.prepareStatement(sql);
-                stm.setInt(1, bookId);
-                int rs = stm.executeUpdate();
-                if (rs != -1)
-                {
-                    System.out.println("update author book : Delete author book success");
-                    check = true;
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            finally
-            {
-                closeConnection();
-            }
-        }
-        if (check)
-        {
-            check = addAuthorBook(bookId, authorIds);
-        }
-        return check;
     }
 
     public List<Book> searchBooks(String searchString, int authorId)
@@ -483,16 +470,17 @@ public class BookController
         return authors;
     }
 
-    public List<Book> getBooksTest()
+    public List<Book> getBooksVer2()
     {
         List<Book> books = new ArrayList<>();
         DBManager db = new DBManager();
         con = db.connectDB2();
+        bookMap = new HashMap<>();
         if (con != null)
         {
             try
             {
-                String sql = "SELECT * FROM BOOKS";
+                String sql = "SELECT *, k.NAME AS author_name FROM BOOKS b LEFT JOIN BOOK_AUTHORS o ON b.BOOK_ID = o.BOOK_ID LEFT JOIN AUTHORS k ON k.AUTHOR_ID = o.AUTHOR_ID";
                 stm = con.prepareStatement(sql);
                 rs = stm.executeQuery();
                 if (rs != null)
@@ -503,20 +491,30 @@ public class BookController
                         String name = rs.getString("name");
                         String description = rs.getString("description");
                         int publisherId = rs.getInt("publisher_id");
-                        String author = "";
-                        List<Integer> authorId = getAuthorOfBook(bookId);
-                        if (authorId.size() > 0)
-                        {
-                            for (Integer id : authorId)
-                            {
-                                author += authors.get(id) + " ";
+                        String author = rs.getString("author_name");
+                        int authorId = rs.getInt("author_id");
+                        List<Integer> authorIds = new ArrayList<>();
+                        authorIds.add(authorId);
 
-                            }
+                        if (bookMap.containsKey(bookId))
+                        {
+                            String authorName = bookMap.get(bookId).getAuthor() + " " + author;
+                            bookMap.get(bookId).setAuthor(authorName);
+                            authorIds = bookMap.get(bookId).getAuthorId();
+                            authorIds.add(authorId);
+                            bookMap.get(bookId).setAuthorId(authorIds);
                         }
-                        Book dto = new Book(bookId, name, publisher.get(publisherId), author, description);
-                        dto.setPublisherId(publisherId);
-                        dto.setAuthorId(authorId);
-                        books.add(dto);
+                        else
+                        {
+                            Book dto = new Book(bookId, name, publisher.get(publisherId), author, description);
+                            dto.setPublisherId(publisherId);
+                            dto.setAuthorId(authorIds);
+                            bookMap.put(bookId, dto);
+                        }
+                    }
+                    for (Map.Entry<Integer, Book> book : bookMap.entrySet())
+                    {
+                        books.add(book.getValue());
                     }
                 }
             }

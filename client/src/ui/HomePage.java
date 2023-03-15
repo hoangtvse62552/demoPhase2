@@ -238,7 +238,7 @@ public class HomePage extends JFrame
 
     private void getBooks()
     {
-        books = sv.getBooks();
+        books = sv.getBooksVer2();
         initTable();
     }
 
@@ -298,9 +298,6 @@ public class HomePage extends JFrame
                     boolean rs = sv.updateBook(dto);
                     if (rs)
                     {
-                        boolean rs1 = sv.updateAuthorBook(bookId, authorIds);
-                        if (rs1)
-                            System.out.println("Update Book Author successful");
                         System.out.println("Update Book successful");
                         getBooks();
                     }
