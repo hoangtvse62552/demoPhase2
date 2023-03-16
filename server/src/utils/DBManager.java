@@ -1,4 +1,4 @@
-package controller;
+package utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,11 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import main.Config;
+
 public class DBManager
 {
-    String            url      = "jdbc:db2:books";
-    String            user     = "db2admin";
-    String            password = "1234";
     Connection        con;
     PreparedStatement stm;
     ResultSet         rs;
@@ -19,12 +18,13 @@ public class DBManager
     {
         try
         {
+            Config config = new Config();
             // Load the driver
             Class.forName("com.ibm.db2.jcc.DB2Driver");
 //            Class.forName("com.ibm.db2.jdbc.app.DB2Driver");
 
             // Create the connection using the IBM Data Server Driver for JDBC and SQLJ
-            con = DriverManager.getConnection(url, user, password);
+            con = DriverManager.getConnection(config.getUrl(), config.getUser(), config.getPassword());
             // Commit changes manually
             con.setAutoCommit(false);
 

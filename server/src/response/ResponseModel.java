@@ -24,5 +24,4 @@ public class ResponseModel
     {
         this.error = error;
     }
-
 }

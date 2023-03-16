@@ -13,5 +13,4 @@ public class RequestModel
     {
         this.action = action;
     }
-
 }
