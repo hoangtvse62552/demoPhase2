@@ -5,7 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD
 import model.*;
+=======
+import model.Author;
+import model.Book;
+import model.Publisher;
+>>>>>>> 1bfb24d6afbc0c9c018714f7e5d64794578437d0
 
 public class BookController
 {
