@@ -1,10 +1,25 @@
 package model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "account")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Account
 {
+
+    @XmlElement(name = "id")
     private String  id;
+
+    @XmlElement(name = "username")
     private String  username;
+
+    @XmlElement(name = "password")
     private String  password;
+
+    @XmlElement(name = "isAdmin")
     private boolean isAdmin;
 
     public Account()

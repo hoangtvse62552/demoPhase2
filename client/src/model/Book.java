@@ -2,14 +2,34 @@ package model;
 
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "book")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Book
 {
+    @XmlElement(name = "id")
     private int           id;
+
+    @XmlElement(name = "name")
     private String        name;
+
+    @XmlElement(name = "publisher")
     private String        publisher;
+
+    @XmlElement(name = "author")
     private String        author;
+
+    @XmlElement(name = "description")
     private String        description;
+
+    @XmlElement(name = "publisherId")
     private int           publisherId;
+
+    @XmlElement(name = "authorId")
     private List<Integer> authorId;
 
     public List<Integer> getAuthorId()
@@ -90,6 +110,11 @@ public class Book
         this.publisher = publisher;
         this.author = author;
         this.description = description;
+    }
+
+    public Book()
+    {
+        super();
     }
 
     @Override

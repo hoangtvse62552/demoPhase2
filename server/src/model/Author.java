@@ -1,8 +1,17 @@
 package model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "author")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Author
 {
+    @XmlElement(name = "id")
     private int    id;
+    @XmlElement(name = "name")
     private String name;
 
     public int getId()
@@ -32,4 +41,7 @@ public class Author
         this.name = name;
     }
 
+    public Author()
+    {
+    }
 }

@@ -4,22 +4,18 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import model.Book;
 
-@XmlRootElement(name = "request")
+@XmlRootElement(name = "BookRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RequestModel
+public class BookRequest extends RequestModel
 {
-    @XmlElement(name = "action")
-    private String action;
+    @XmlElement(name = "book")
+    private Book book;
 
-    public void setAction(String action)
+    public void setBook(Book book)
     {
-        this.action = action;
+        this.book = book;
     }
 
-    public String getAction()
-    {
-        return action;
-    }
-    
 }

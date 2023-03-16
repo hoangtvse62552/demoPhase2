@@ -1,8 +1,17 @@
 package model;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "publisher")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Publisher
 {
+    @XmlElement(name = "id")
     private int    id;
+    @XmlElement(name = "name")
     private String name;
 
     public int getId()
@@ -32,4 +41,8 @@ public class Publisher
         this.name = name;
     }
 
+    public Publisher()
+    {
+
+    }
 }
