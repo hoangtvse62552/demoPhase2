@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class DBManager
 {
-    String            url      = "jdbc:db2:books";
-    String            user     = "db2admin";
-    String            password = "1234";
+    String            url      = "jdbc:db2://localhost:50002/demo2";
+    String            user     = "db2inst1";
+    String            password = "Nqh1999@";
     Connection        con;
     PreparedStatement stm;
     ResultSet         rs;
@@ -20,7 +20,7 @@ public class DBManager
         try
         {
             // Load the driver
-            Class.forName("com.ibm.db2.jcc.DB2Driver");
+//            Class.forName("com.ibm.db2.jcc.DB2Driver");
 //            Class.forName("com.ibm.db2.jdbc.app.DB2Driver");
 
             // Create the connection using the IBM Data Server Driver for JDBC and SQLJ
@@ -30,10 +30,6 @@ public class DBManager
 
             // Create the Statement
 
-        }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
         }
         catch (SQLException ex)
         {

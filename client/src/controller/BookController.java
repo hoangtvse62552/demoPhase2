@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ibm.db2.jcc.am.bo;
-
-import model.*;
+import model.Author;
+import model.Book;
+import model.Publisher;
 
 public class BookController
 {
