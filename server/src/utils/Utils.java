@@ -52,6 +52,41 @@ public class Utils
         return xmlResult;
     }
 
+    public RequestModel convertXmlToRequest(String xmlString)
+    {
+        RequestModel request = null;
+        try
+        {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(xmlString)));
+            Element root = document.getDocumentElement();
+
+            NodeList actionNode = root.getElementsByTagName("action");
+
+            String action = actionNode.item(0).getTextContent();
+
+            // get book info
+            JAXBContext context;
+            if (action.equals("Login"))
+            {
+                context = JAXBContext.newInstance(AccountRequest.class);
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                request = (AccountRequest) unmarshaller.unmarshal(root);
+            }
+            else
+            {
+                context = JAXBContext.newInstance(BookRequest.class);
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                request = (BookRequest) unmarshaller.unmarshal(root);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error convert xml to request: " + e);
+        }
+        return request;
+    }
+
     public ResponseModel convertXmlToResponse(String xmlString)
     {
         ResponseModel response = null;
@@ -83,4 +118,35 @@ public class Utils
         }
         return response;
     }
+
+    public String convertResponseToXml(ResponseModel input)
+    {
+        String xmlResult = "";
+        try
+        {
+            JAXBContext context;
+            if (input instanceof AccountResponse)
+            {
+                input = (AccountResponse) input;
+                context = JAXBContext.newInstance(AccountResponse.class);
+            }
+            else
+            {
+                input = (BookResponse) input;
+                context = JAXBContext.newInstance(BookResponse.class);
+            }
+
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(input, sw);
+            xmlResult = sw.toString();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return xmlResult;
+    }
+
 }
