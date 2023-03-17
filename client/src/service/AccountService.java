@@ -28,7 +28,7 @@ public class AccountService
 
         AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(serverCfg, xmlRq);
 
-        if ("success".equals(accountResponse.getStatus()))
+        if ("Success".equals(accountResponse.getStatus()))
         {
             account.setAdmin(accountResponse.isAdmin());
         }

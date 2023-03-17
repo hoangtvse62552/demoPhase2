@@ -17,7 +17,7 @@ public class ConnectManager
         try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
         {
             // flush data to server
-            writer.print(xmlRq);
+            writer.println(xmlRq);
 
             // getting response XML string
             StringBuilder xmlRp = new StringBuilder();

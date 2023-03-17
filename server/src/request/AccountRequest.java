@@ -25,4 +25,14 @@ public class AccountRequest extends RequestModel
         this.password = password;
     }
 
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
 }
