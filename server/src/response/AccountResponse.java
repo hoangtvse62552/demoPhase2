@@ -17,4 +17,8 @@ public class AccountResponse extends ResponseModel
         this.isAdmin = isAdmin;
     }
 
+    public boolean isAdmin()
+    {
+        return isAdmin;
+    }
 }
