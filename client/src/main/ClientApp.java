@@ -3,7 +3,7 @@ package main;
 import controller.DirectController;
 import ui.LoginPage;
 
-public class MainAplication
+public class ClientApp
 {
     private static DirectController controller;
 
@@ -13,5 +13,6 @@ public class MainAplication
         LoginPage loginPage = new LoginPage(controller);
         loginPage.setVisible(true);
 
+        
     }
 }

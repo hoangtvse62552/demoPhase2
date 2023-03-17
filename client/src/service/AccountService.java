@@ -1,18 +1,15 @@
 package service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import main.ServerCfg;
 import model.Account;
 import request.AccountRequest;
 import response.AccountResponse;
+import response.ResponseModel;
 import utils.Utils;
 
 public class AccountService
@@ -32,24 +29,26 @@ public class AccountService
 
         // Get connection
         ServerCfg serverCfg = new ServerCfg("127.0.0.1", 9090);
-        try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()))
+        try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
         {
 
-            OutputStream outputStream = clientSocket.getOutputStream();
-
-            PrintWriter writer = new PrintWriter(outputStream, true);
+            // flush data to server
             writer.print(xmlRq);
 
-            InputStream inputStream = clientSocket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String responseXml = reader.readLine();
-            System.out.println(responseXml + "/n response");
+            // getting response XML string
+            StringBuilder responseXML = new StringBuilder();
+            String line;
+            while (!"".equals((line = reader.readLine())))
+            {
+                responseXML.append(line).append(System.lineSeparator());
+            }
 
-            AccountResponse accountResponse = (AccountResponse) util.convertXmlToResponse(responseXml);
+            System.out.println(responseXML);
+            ResponseModel accountResponse = util.convertXmlToResponse(responseXML.toString());
 
             if ("success".equals(accountResponse.getStatus()))
             {
-                account.setAdmin(accountResponse.isAdmin());
+                account.setAdmin(((AccountResponse) accountResponse).isAdmin());
                 account.setUsername(username);
                 account.setPassword(password);
             }
@@ -59,16 +58,11 @@ public class AccountService
             }
 
         }
-        catch (UnknownHostException ex)
+        catch (Exception ex)
         {
 
             System.out.println("Server not found: " + ex.getMessage());
 
-        }
-        catch (IOException ex)
-        {
-
-            System.out.println("I/O error: " + ex.getMessage());
         }
 
         return account;

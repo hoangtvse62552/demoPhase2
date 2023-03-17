@@ -35,5 +35,4 @@ public class ResponseModel
         return error;
     }
 
-
 }
