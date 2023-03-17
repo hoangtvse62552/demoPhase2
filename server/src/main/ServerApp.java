@@ -42,6 +42,7 @@ public class ServerApp
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();
         }
+        System.out.println("Sv closed");
     }
 
 }

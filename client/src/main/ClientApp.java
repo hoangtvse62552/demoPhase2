@@ -13,6 +13,5 @@ public class ClientApp
         LoginPage loginPage = new LoginPage(controller);
         loginPage.setVisible(true);
 
-        
     }
 }
