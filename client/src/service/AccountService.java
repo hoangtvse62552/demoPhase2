@@ -1,15 +1,11 @@
 package service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-
 import main.ServerCfg;
 import model.Account;
 import request.AccountRequest;
 import response.AccountResponse;
-import utils.Utils;
+import utils.ConnectManager;
+import utils.XmlUtils;
 
 public class AccountService
 {
@@ -22,51 +18,25 @@ public class AccountService
         rq.setPassword(password);
         rq.setUsername(username);
 
-        Utils util = new Utils();
+        XmlUtils util = new XmlUtils();
         String xmlRq = util.convertRequestToXml(rq);
         System.out.println(xmlRq);
 
         // Get connection
         ServerCfg serverCfg = new ServerCfg("127.0.0.1", 9090);
-        try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
+        ConnectManager connectManager = new ConnectManager();
+
+        AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(serverCfg, xmlRq);
+
+        if ("success".equals(accountResponse.getStatus()))
         {
-
-            // flush data to server
-            writer.print(xmlRq);
-
-            // getting response XML string
-            StringBuilder responseXML = new StringBuilder();
-            String line = reader.readLine();
-            String xmlResp = "";
-            while (!line.isEmpty())
-            {
-                responseXML.append(line).append(System.lineSeparator());
-                xmlResp += line;
-                line = reader.readLine();
-            }
-
-            System.out.println(responseXML);
-            AccountResponse accountResponse = (AccountResponse) util.convertXmlToResponse(xmlResp);
-
-            if ("success".equals(accountResponse.getStatus()))
-            {
-                account.setAdmin(accountResponse.isAdmin());
-                System.out.println(accountResponse.toString());
-            }
-            else
-            {
-                System.out.println(accountResponse.getError());
-                return null;
-            }
-
+            account.setAdmin(accountResponse.isAdmin());
         }
-        catch (Exception ex)
+        else
         {
-            ex.printStackTrace();
-            System.out.println("Server not found: " + ex.getMessage());
-
+            System.out.println(accountResponse.getError());
+            return null;
         }
-
         return account;
     }
 }
