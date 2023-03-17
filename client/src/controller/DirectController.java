@@ -1,6 +1,7 @@
 package controller;
 
-import ui.*;
+import ui.HomePage;
+import ui.LoginPage;
 
 public class DirectController
 {
@@ -12,7 +13,7 @@ public class DirectController
         super();
     }
 
-    public void login(boolean isAdmin, ui.LoginPage loginPage)
+    public void login(boolean isAdmin, LoginPage loginPage)
     {
         this.loginPage = loginPage;
         homepage = new HomePage(isAdmin, this);
