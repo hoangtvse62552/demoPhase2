@@ -20,7 +20,7 @@ import response.AccountResponse;
 import response.BookResponse;
 import response.ResponseModel;
 
-public class Utils
+public class XmlUtils
 {
     public String convertRequestToXml(RequestModel input)
     {
