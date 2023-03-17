@@ -15,10 +15,11 @@ public class DirectController
 
     public void login(boolean isAdmin, LoginPage loginPage)
     {
-        this.loginPage = loginPage;
-        homepage = new HomePage(isAdmin, this);
-        this.loginPage.setVisible(false);
-        homepage.setVisible(true);
+        System.out.println("DirectController: Login success");
+//        this.loginPage = loginPage;
+//        homepage = new HomePage(isAdmin, this);
+//        this.loginPage.setVisible(false);
+//        homepage.setVisible(true);
     }
 
     public void logout()

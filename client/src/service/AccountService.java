@@ -38,23 +38,27 @@ public class AccountService
             // getting response XML string
             StringBuilder responseXML = new StringBuilder();
             String line;
+            String xmlResp = "";
             while (!"".equals((line = reader.readLine())))
             {
                 responseXML.append(line).append(System.lineSeparator());
+                xmlResp += line;
             }
 
             System.out.println(responseXML);
-            ResponseModel accountResponse = util.convertXmlToResponse(responseXML.toString());
+            AccountResponse accountResponse = (AccountResponse) util.convertXmlToResponse(xmlResp);
 
             if ("success".equals(accountResponse.getStatus()))
             {
-                account.setAdmin(((AccountResponse) accountResponse).isAdmin());
+                account.setAdmin(accountResponse.isAdmin());
                 account.setUsername(username);
                 account.setPassword(password);
             }
             else
             {
                 System.out.println(accountResponse.getError());
+                return null;
+
             }
 
         }
