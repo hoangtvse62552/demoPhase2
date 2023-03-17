@@ -9,7 +9,6 @@ import main.ServerCfg;
 import model.Account;
 import request.AccountRequest;
 import response.AccountResponse;
-import response.ResponseModel;
 import utils.Utils;
 
 public class AccountService
@@ -37,12 +36,13 @@ public class AccountService
 
             // getting response XML string
             StringBuilder responseXML = new StringBuilder();
-            String line;
+            String line = reader.readLine();
             String xmlResp = "";
-            while (!"".equals((line = reader.readLine())))
+            while (!line.isEmpty())
             {
                 responseXML.append(line).append(System.lineSeparator());
                 xmlResp += line;
+                line = reader.readLine();
             }
 
             System.out.println(responseXML);
@@ -51,20 +51,18 @@ public class AccountService
             if ("success".equals(accountResponse.getStatus()))
             {
                 account.setAdmin(accountResponse.isAdmin());
-                account.setUsername(username);
-                account.setPassword(password);
+                System.out.println(accountResponse.toString());
             }
             else
             {
                 System.out.println(accountResponse.getError());
                 return null;
-
             }
 
         }
         catch (Exception ex)
         {
-
+            ex.printStackTrace();
             System.out.println("Server not found: " + ex.getMessage());
 
         }

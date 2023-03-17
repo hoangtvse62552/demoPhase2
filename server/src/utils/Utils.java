@@ -96,7 +96,7 @@ public class Utils
             Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(xmlString)));
             Element root = document.getDocumentElement();
 
-            NodeList actionNode = root.getElementsByTagName("AccountResponse");
+            NodeList actionNode = root.getElementsByTagName("isAdmin");
 
             JAXBContext context;
             if (actionNode.item(0) != null)
