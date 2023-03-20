@@ -1,6 +1,5 @@
 package service;
 
-import main.ServerCfg;
 import model.Account;
 import request.AccountRequest;
 import response.AccountResponse;
@@ -20,13 +19,11 @@ public class AccountService
 
         XmlUtils util = new XmlUtils();
         String xmlRq = util.convertRequestToXml(rq);
-        System.out.println(xmlRq);
 
         // Get connection
-        ServerCfg serverCfg = new ServerCfg("127.0.0.1", 9090);
         ConnectManager connectManager = new ConnectManager();
 
-        AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(serverCfg, xmlRq);
+        AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(xmlRq);
 
         if ("Success".equals(accountResponse.getStatus()))
         {

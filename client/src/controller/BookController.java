@@ -8,6 +8,7 @@ import java.util.Map;
 import model.Author;
 import model.Book;
 import model.Publisher;
+import service.BookService;
 
 public class BookController
 {
@@ -16,36 +17,38 @@ public class BookController
     private List<Publisher>      publisherList;
     private List<Author>         authorList;
     private Map<Integer, Book>   bookMap;
+    private BookService          service;
 
     public BookController()
     {
+        service = new BookService();
         getPublisher();
         getAuthors();
-
     }
 
     public List<Book> getBooks()
     {
         List<Book> books = new ArrayList<>();
-
+        books = service.getBooks();
         return books;
     }
 
     private void getPublisher()
     {
-
+        publisherList = service.getPublisher();
+        for (Publisher item : publisherList)
+        {
+            publisher.put(item.getId(), item.getName());
+        }
     }
 
     private void getAuthors()
     {
-
-    }
-
-    private List<Integer> getAuthorOfBook(int bookId)
-    {
-        List<Integer> authorsId = new ArrayList<>();
-
-        return authorsId;
+        authorList = service.getAuthor();
+        for (Author item : authorList)
+        {
+            authors.put(item.getId(), item.getName());
+        }
     }
 
     public boolean updateBook(Book book)
@@ -63,8 +66,7 @@ public class BookController
 
     public boolean deleteBook(int id)
     {
-
-        return false;
+        return service.deleteBook(id);
 
     }
 
@@ -80,18 +82,11 @@ public class BookController
 
     public List<Book> searchBooks(String searchString, int authorId)
     {
-
-        return null;
+        return service.searchBooks(searchString.trim(), authorId);
     }
 
     public Map<Integer, String> getAuthorMap()
     {
         return authors;
-    }
-
-    public List<Book> getBooksVer2()
-    {
-
-        return null;
     }
 }

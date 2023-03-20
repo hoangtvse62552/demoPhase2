@@ -18,4 +18,9 @@ public class BookRequest extends RequestModel
         this.book = book;
     }
 
+    public Book getBook()
+    {
+        return book;
+    }
+
 }

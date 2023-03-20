@@ -19,13 +19,13 @@ public class LoginPage extends Frame implements ActionListener
     private JPasswordField    txtPassword;
     private JButton           btnLogin;
     private JLabel            lbError;
-    private DirectController  controller;
+    private DirectController  directController;
 
     private final JTextField  txtError         = new JTextField();
 
-    public LoginPage(DirectController controller)
+    public LoginPage(DirectController directController)
     {
-        this.controller = controller;
+        this.directController = directController;
         txtError.setColumns(10);
         JLabel lbUsername = new JLabel("Username");
         lbUsername.setBounds(50, 50, 100, 20);
@@ -72,13 +72,13 @@ public class LoginPage extends Frame implements ActionListener
             if (!password.trim().equals("") && !username.trim().equals(""))
             {
                 lbError.setVisible(false);
-                AccountController manager = new AccountController();
-                Account dto = manager.login(username, password);
+                AccountController accController = new AccountController();
+                Account dto = accController.login(username, password);
                 if (dto != null)
                 {
                     System.out.println("Login Successl");
                     // chuyển map
-                    controller.login(dto.isAdmin(), this);
+                    directController.login(dto.isAdmin(), this);
                 }
                 else
                 {

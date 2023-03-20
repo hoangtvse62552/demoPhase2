@@ -238,7 +238,7 @@ public class HomePage extends JFrame
 
     private void getBooks()
     {
-        books = sv.getBooksVer2();
+        books = sv.getBooks();
         initTable();
     }
 

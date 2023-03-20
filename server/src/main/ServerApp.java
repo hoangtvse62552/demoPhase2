@@ -52,7 +52,6 @@ public class ServerApp
                         System.out.println(line);
                         xmlString += line;
                     }
-                    System.out.println("xml request:" + xmlString);
                     if (xmlString.length() > 0)
                     {
                         RequestModel req = utils.convertXmlToRequest(xmlString);
@@ -64,6 +63,27 @@ public class ServerApp
                         case "GetBook":
                             bookController.getBooks();
                             break;
+                        case "Create":
+                            bookController.createBook(req);
+                            break;
+                        case "Search":
+                            bookController.searchBooks(req);
+                            break;
+                        case "Update":
+                            bookController.updateBook(req);
+                            break;
+                        case "Delete":
+                            bookController.deleteBook(req);
+                            break;
+                        case "GetAuthor":
+                            bookController.getAuthor();
+                            break;
+                        case "GetPublisher":
+                            bookController.getPublisher();
+                            break;
+                        case "Ping":
+                            bookController.ping();
+                            break;
                         default:
                             throw new IllegalArgumentException("Unexpected value: " + req.getAction());
                         }
@@ -74,22 +94,14 @@ public class ServerApp
                     System.out.println(e);
                     e.printStackTrace();
                 }
-
-//                PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-//
-//                ResponseModel accountResponseModel = new AccountResponse();
-//                accountResponseModel.setStatus("success");
-//
-//                writer.println(utils.convertResponseToXml(accountResponseModel));
             }
-
         }
         catch (Exception ex)
         {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();
         }
-        System.out.println("Sv closed");
+        System.out.println("Sv is closed");
     }
 
 }

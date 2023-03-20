@@ -12,9 +12,10 @@ import response.ResponseModel;
 
 public class ConnectManager
 {
-    public ResponseModel getResponse(ServerCfg serverCfg, String xmlRq)
+    public ResponseModel getResponse(String xmlRq)
     {
-        try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
+        ServerCfg config = new ServerCfg();
+        try (Socket clientSocket = new Socket(config.getServerIp(), config.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
         {
             // flush data to server
             writer.println(xmlRq);

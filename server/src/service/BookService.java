@@ -237,9 +237,7 @@ public class BookService
                 stm.setString(3, timeStamp);
                 stm.setInt(4, book.getPublisherId());
                 stm.setInt(5, book.getId());
-//                System.out.println(book.toString());
                 int rs = stm.executeUpdate();
-//                System.out.println("result of update book: " + rs);
                 if (rs != -1)
                 {
                     String sql1 = "DELETE FROM BOOK_AUTHORS WHERE BOOK_ID = ?";

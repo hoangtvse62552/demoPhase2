@@ -2,23 +2,18 @@ package main;
 
 public class ServerCfg
 {
-    private String serverIp;
+    private final String SERVER_IP   = "127.0.0.1";
 
-    private int    serverPort;
-
-    public ServerCfg(String serverIp, int serverPort)
-    {
-        this.serverIp = serverIp;
-        this.serverPort = serverPort;
-    }
+    private final int    SERVER_PORT = 9090;
 
     public String getServerIp()
     {
-        return serverIp;
+        return SERVER_IP;
     }
 
     public int getServerPort()
     {
-        return serverPort;
+        return SERVER_PORT;
     }
+
 }
