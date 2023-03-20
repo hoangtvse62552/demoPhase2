@@ -8,6 +8,7 @@ import model.Book;
 import model.Publisher;
 import request.BookRequest;
 import response.BookResponse;
+import response.ResponseModel;
 import utils.ConnectManager;
 import utils.XmlUtils;
 
@@ -110,6 +111,29 @@ public class BookService
         {
             return true;
         }
+        return false;
+    }
+
+    public boolean updateBook(Book book)
+    {
+        System.out.println("Update book: ");
+        System.out.println("=====================");
+
+        BookRequest req = new BookRequest();
+        req.setAction("Update");
+        req.setBook(book);
+
+        XmlUtils util = new XmlUtils();
+        String xmlRq = util.convertRequestToXml(req);
+
+        // getting response from server
+        ConnectManager connectManager = new ConnectManager();
+        ResponseModel bookResq = connectManager.getResponse(xmlRq);
+        if (bookResq instanceof BookResponse && "Success".equals(bookResq.getStatus()))
+        {
+            return true;
+        }
+        System.out.println(bookResq.getError());
         return false;
     }
 }

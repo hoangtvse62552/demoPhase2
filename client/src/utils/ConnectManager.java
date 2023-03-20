@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import main.ServerCfg;
-import response.AccountResponse;
-import response.BookResponse;
 import response.ResponseModel;
 
 public class ConnectManager
@@ -30,15 +28,7 @@ public class ConnectManager
             }
 
             XmlUtils xmlUtil = new XmlUtils();
-            ResponseModel response = xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
-            if (response instanceof AccountResponse)
-            {
-                return (AccountResponse) response;
-            }
-            else
-            {
-                return (BookResponse) response;
-            }
+            return xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
         }
         catch (Exception e)
         {

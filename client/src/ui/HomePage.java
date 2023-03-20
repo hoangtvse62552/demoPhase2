@@ -53,7 +53,7 @@ public class HomePage extends JFrame
 
     private List<Author>                 authors;
     private List<Publisher>              publisher;
-    private JButton                      btnSave;
+    private JButton                      btnUpdate;
     private Map<String, Integer>         authorsMap;
     private Map<String, Integer>         publisherMap;
 
@@ -147,8 +147,8 @@ public class HomePage extends JFrame
         btnCreate = new JButton("Add");
         btnCreate.setBounds(450, 260, 80, 20);
 
-        btnSave = new JButton("Save");
-        btnSave.setBounds(450, 300, 80, 20);
+        btnUpdate = new JButton("Update");
+        btnUpdate.setBounds(450, 300, 80, 20);
 
         btnDelete = new JButton("Delete");
         btnDelete.setBounds(450, 340, 80, 20);
@@ -177,7 +177,7 @@ public class HomePage extends JFrame
         add(txtDescription);
         add(btnCreate);
 
-        add(btnSave);
+        add(btnUpdate);
         add(btnDelete);
 
         add(btnLogout);
@@ -197,7 +197,7 @@ public class HomePage extends JFrame
         cbPublisher.setVisible(x);
         lbDescription.setVisible(x);
         txtDescription.setVisible(x);
-        btnSave.setVisible(x);
+        btnUpdate.setVisible(x);
         btnCreate.setVisible(x);
         btnDelete.setVisible(x);
         tblBook.setEnabled(x);
@@ -273,7 +273,7 @@ public class HomePage extends JFrame
                 controller.logout();
             }
         });
-        btnSave.addActionListener(new ActionListener()
+        btnUpdate.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
