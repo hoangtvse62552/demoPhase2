@@ -1,11 +1,9 @@
 package main;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -38,6 +36,7 @@ public class ServerApp
                 // get input
                 is = socket.getInputStream();
                 os = socket.getOutputStream();
+                System.out.println("InputStream: " + is + " OutputStream: " + os);
                 AccountController accountController = new AccountController(os);
                 BookController bookController = new BookController(os);
 
@@ -45,9 +44,10 @@ public class ServerApp
                 {
                     String xmlString = "";
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                    System.out.println(reader == null);
                     String line = "";
 
-                    while (!(line = reader.readLine()).isEmpty())
+                    while (reader.readLine() != null && !(line = reader.readLine()).isEmpty())
                     {
                         System.out.println(line);
                         xmlString += line;
