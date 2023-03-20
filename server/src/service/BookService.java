@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ibm.db2.jcc.am.bo;
-
-import model.*;
+import model.Author;
+import model.Book;
+import model.Publisher;
 import utils.DBManager;
 
 public class BookService
@@ -238,14 +238,14 @@ public class BookService
                 stm.setInt(4, book.getPublisherId());
                 stm.setInt(5, book.getId());
                 int rs = stm.executeUpdate();
-                if (rs != -1)
+                if (rs != 0)
                 {
                     String sql1 = "DELETE FROM BOOK_AUTHORS WHERE BOOK_ID = ?";
                     stm = con.prepareStatement(sql1);
                     stm.setInt(1, book.getId());
                     rs = stm.executeUpdate();
                     System.out.println(book.getAuthorId().size());
-                    if (rs != -1)
+                    if (rs != 0)
                     {
                         for (Integer id : book.getAuthorId())
                         {
@@ -254,7 +254,7 @@ public class BookService
                             stm.setInt(1, id);
                             stm.setInt(2, book.getId());
                             rs = stm.executeUpdate();
-                            if (rs == -1)
+                            if (rs == 0)
                             {
                                 return false;
                             }
@@ -374,7 +374,7 @@ public class BookService
                 stm = con.prepareStatement(sql);
                 stm.setInt(1, id);
                 int rs = stm.executeUpdate();
-                if (rs != -1)
+                if (rs != 0)
                 {
                     return true;
                 }
