@@ -404,9 +404,10 @@ public class BookService
 
     public List<Book> searchBooks(String searchString, int authorId)
     {
+        List<Book> books = new ArrayList<>();
         DBManager db = new DBManager();
         con = db.connectDB2();
-        List<Book> books = new ArrayList<>();
+        bookMap = new HashMap<>();
         if (con != null)
         {
             try
@@ -415,14 +416,20 @@ public class BookService
 
                 if (authorId != -1)
                 {
-                    sql = "SELECT * FROM BOOKS WHERE (BOOK_ID  IN  (SELECT BOOK_ID  FROM BOOK_AUTHORS WHERE AUTHOR_ID = ?)) AND NAME LIKE ?";
+                    sql = "SELECT * , k.NAME AS author_name \r\n"
+                            + "FROM BOOKS b \r\n"
+                            + "LEFT JOIN BOOK_AUTHORS o ON b.BOOK_ID = o.BOOK_ID \r\n"
+                            + "LEFT JOIN AUTHORS k ON k.AUTHOR_ID = o.AUTHOR_ID \r\n"
+                            + "WHERE (b.BOOK_ID  IN  (SELECT BOOK_ID  FROM BOOK_AUTHORS z WHERE z.AUTHOR_ID = ?)) \r\n"
+                            + "AND b.NAME LIKE ?\r\n"
+                            + "ORDER BY b.BOOK_ID ";
                     stm = con.prepareStatement(sql);
                     stm.setInt(1, authorId);
                     stm.setString(2, "%" + searchString + "%");
                 }
                 else
                 {
-                    sql = "SELECT * FROM BOOKS WHERE NAME LIKE ?";
+                    sql = "SELECT *, k.NAME AS author_name FROM BOOKS b LEFT JOIN BOOK_AUTHORS o ON b.BOOK_ID = o.BOOK_ID LEFT JOIN AUTHORS k ON k.AUTHOR_ID = o.AUTHOR_ID WHERE b.NAME LIKE ?";
                     stm = con.prepareStatement(sql);
                     stm.setString(1, "%" + searchString + "%");
                 }
@@ -436,18 +443,30 @@ public class BookService
                         String name = rs.getString("name");
                         String description = rs.getString("description");
                         int publisherId = rs.getInt("publisher_id");
-                        String author = "";
-                        List<Integer> authorIds = getAuthorOfBook(bookId);
-                        if (authorIds.size() > 0)
+                        String author = rs.getString("author_name");
+                        int authorId1 = rs.getInt("author_id");
+                        List<Integer> authorIds = new ArrayList<>();
+                        authorIds.add(authorId1);
+
+                        if (bookMap.containsKey(bookId))
                         {
-                            for (Integer id : authorIds)
-                            {
-                                author += authors.get(id) + " ";
-                            }
+                            String authorName = bookMap.get(bookId).getAuthor() + " " + author;
+                            bookMap.get(bookId).setAuthor(authorName);
+                            authorIds = bookMap.get(bookId).getAuthorId();
+                            authorIds.add(authorId1);
+                            bookMap.get(bookId).setAuthorId(authorIds);
                         }
-                        Book dto = new Book(bookId, name, publisher.get(publisherId), author, description);
-                        dto.setPublisherId(publisherId);
-                        books.add(dto);
+                        else
+                        {
+                            Book dto = new Book(bookId, name, publisher.get(publisherId), author, description);
+                            dto.setPublisherId(publisherId);
+                            dto.setAuthorId(authorIds);
+                            bookMap.put(bookId, dto);
+                        }
+                    }
+                    for (Map.Entry<Integer, Book> book : bookMap.entrySet())
+                    {
+                        books.add(book.getValue());
                     }
                 }
             }

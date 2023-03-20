@@ -77,7 +77,6 @@ public class BookService
         dto.setName(searchString);
         List<Integer> authorid = new ArrayList<>();
         authorid.add(authorId);
-        dto.setAuthor(searchString);
         dto.setAuthorId(authorid);
         BookRequest req = new BookRequest();
         req.setAction("Search");
@@ -89,7 +88,9 @@ public class BookService
         BookResponse resp = (BookResponse) con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
-            books = resp.getBooks();
+            System.out.println("search book success");
+            if (resp.getBooks() != null)
+                books = resp.getBooks();
         }
         return books;
     }
@@ -102,6 +103,24 @@ public class BookService
         dto.setId(id);
         req.setAction("Delete");
         req.setBook(dto);
+        XmlUtils util = new XmlUtils();
+        String xmlRq = util.convertRequestToXml(req);
+        ConnectManager con = new ConnectManager();
+        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        if (resp.getStatus().equals("Success"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean createBook(Book book)
+    {
+        System.out.println("Create book");
+        BookRequest req = new BookRequest();
+
+        req.setAction("Create");
+        req.setBook(book);
         XmlUtils util = new XmlUtils();
         String xmlRq = util.convertRequestToXml(req);
         ConnectManager con = new ConnectManager();

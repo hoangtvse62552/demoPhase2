@@ -59,9 +59,7 @@ public class BookController
 
     public boolean addBook(Book book)
     {
-        boolean check = false;
-
-        return check;
+        return service.createBook(book);
     }
 
     public boolean deleteBook(int id)
