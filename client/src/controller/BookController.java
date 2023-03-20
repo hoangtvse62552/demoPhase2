@@ -53,8 +53,7 @@ public class BookController
 
     public boolean updateBook(Book book)
     {
-
-        return true;
+        return service.updateBook(book);
     }
 
     public boolean addBook(Book book)

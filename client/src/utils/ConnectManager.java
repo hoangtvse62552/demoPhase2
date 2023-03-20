@@ -3,19 +3,19 @@ package utils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import main.ServerCfg;
-import response.AccountResponse;
-import response.BookResponse;
 import response.ResponseModel;
 
 public class ConnectManager
 {
     public ResponseModel getResponse(String xmlRq)
     {
-        ServerCfg config = new ServerCfg();
-        try (Socket clientSocket = new Socket(config.getServerIp(), config.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
+
+        ServerCfg serverCfg = new ServerCfg();
+        try (Socket clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
         {
             // flush data to server
             writer.println(xmlRq);
@@ -30,21 +30,33 @@ public class ConnectManager
             }
 
             XmlUtils xmlUtil = new XmlUtils();
-            ResponseModel response = xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
-            if (response instanceof AccountResponse)
-            {
-                return (AccountResponse) response;
-            }
-            else
-            {
-                return (BookResponse) response;
-            }
+            return xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean pingServer()
+    {
+        ServerCfg serverCfg = new ServerCfg();
+
+        try (Socket socket = new Socket())
+        {
+            InetSocketAddress address = new InetSocketAddress(serverCfg.getServerIp(), serverCfg.getServerPort());
+            socket.connect(address, 1000); // timeout in milliseconds
+
+            System.out.println("Server is up and reachable");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Server is down or unreachable");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 }
