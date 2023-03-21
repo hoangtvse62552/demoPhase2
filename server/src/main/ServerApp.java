@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import controller.AccountController;
 import controller.BookController;
+import logger.ServerLogger;
 import request.RequestModel;
 import utils.Utils;
 
@@ -36,21 +37,19 @@ public class ServerApp
                 // get input
                 is = socket.getInputStream();
                 os = socket.getOutputStream();
-                System.out.println("InputStream: " + is + " OutputStream: " + os);
                 AccountController accountController = new AccountController(os);
                 BookController bookController = new BookController(os);
-
                 try
                 {
                     String xmlString = "";
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    System.out.println(reader == null);
-                    String line = "";
+                    String line = reader.readLine();
 
-                    while (reader.readLine() != null && !(line = reader.readLine()).isEmpty())
+                    while (line != null && !line.isEmpty())
                     {
                         System.out.println(line);
                         xmlString += line;
+                        line = reader.readLine();
                     }
                     if (xmlString.length() > 0)
                     {
@@ -81,9 +80,6 @@ public class ServerApp
                         case "GetPublisher":
                             bookController.getPublisher();
                             break;
-                        case "Ping":
-                            bookController.ping();
-                            break;
                         default:
                             throw new IllegalArgumentException("Unexpected value: " + req.getAction());
                         }
@@ -91,14 +87,14 @@ public class ServerApp
                 }
                 catch (Exception e)
                 {
-                    System.out.println(e);
+                    ServerLogger.getInstance().writeLog(e.getStackTrace());
                     e.printStackTrace();
                 }
             }
         }
         catch (Exception ex)
         {
-            System.out.println("Server exception: " + ex.getMessage());
+            ServerLogger.getInstance().writeLog(ex.getStackTrace());
             ex.printStackTrace();
         }
         System.out.println("Sv is closed");

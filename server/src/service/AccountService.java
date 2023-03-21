@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import logger.ServerLogger;
 import model.*;
 import utils.DBManager;
 
@@ -47,6 +48,7 @@ public class AccountService
         }
         catch (Exception e)
         {
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
             e.printStackTrace();
         }
         finally
@@ -76,6 +78,7 @@ public class AccountService
         }
         catch (Exception e)
         {
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
             e.printStackTrace();
         }
     }

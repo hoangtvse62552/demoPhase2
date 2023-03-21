@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import logger.ClientLogger;
 import main.ServerCfg;
 import response.ResponseModel;
 
@@ -35,6 +36,7 @@ public class ConnectManager
         catch (Exception e)
         {
             e.printStackTrace();
+            ClientLogger.getInstance().writeLog(e.getStackTrace());
         }
         return null;
     }
@@ -54,6 +56,7 @@ public class ConnectManager
         {
             System.out.println("Server is down or unreachable");
             e.printStackTrace();
+            ClientLogger.getInstance().writeLog(e.getStackTrace());
             return false;
         }
         return true;

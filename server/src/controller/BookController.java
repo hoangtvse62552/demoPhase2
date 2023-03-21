@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+import logger.ServerLogger;
 import model.Author;
 import model.Book;
 import model.Publisher;
@@ -39,6 +40,7 @@ public class BookController
         {
             resp.setStatus("Fail");
             e.printStackTrace();
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {
@@ -66,6 +68,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {
@@ -92,6 +95,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {
@@ -118,6 +122,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {
@@ -142,6 +147,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {
@@ -165,6 +171,7 @@ public class BookController
         catch (Exception e)
         {
             e.printStackTrace();
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
             resp.setStatus("Fail");
         }
         finally
@@ -191,24 +198,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-        }
-        finally
-        {
-            sendResponse(resp);
-        }
-    }
-
-    public void ping()
-    {
-        BookResponse resp = new BookResponse();
-        try
-        {
-            resp.setStatus("Success");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            resp.setStatus("Fail");
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
         }
         finally
         {

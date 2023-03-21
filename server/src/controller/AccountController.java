@@ -3,6 +3,7 @@ package controller;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import logger.ServerLogger;
 import model.Account;
 import request.AccountRequest;
 import request.RequestModel;
@@ -47,6 +48,7 @@ public class AccountController
         }
         catch (Exception e)
         {
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
             e.printStackTrace();
         }
         finally
