@@ -19,28 +19,6 @@ public class ClientLogger
         return logger;
     }
 
-//    public void writeLog(StackTraceElement[] ex)
-//    {
-//        try
-//        {
-//            String direct = System.getProperty("user.dir");
-//            file = new FileHandler(direct + "/log/logfile.log");
-//            log.addHandler(file);
-//
-//            SimpleFormatter formatter = new SimpleFormatter();
-//            file.setFormatter(formatter);
-//
-//            for (StackTraceElement stackTraceElement : ex)
-//            {
-//                log.info(stackTraceElement.toString());
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            System.out.println("Error Create LogFile: " + e);
-//        }
-//    }
-
     public void writeLog(Exception e)
     {
         try
