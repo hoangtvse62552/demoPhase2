@@ -15,14 +15,9 @@ public class ClientApp
     {
         controller = new DirectController();
 
-        new Thread()
-        {
-            public void run()
-            {
-                loginPage = new LoginPage(controller);
-                loginPage.setVisible(true);
-            }
-        }.start();
+        loginPage = new LoginPage(controller);
+        loginPage.setVisible(true);
+        controller.setLoginPage(loginPage);
 
         new Thread()
         {
@@ -39,7 +34,7 @@ public class ClientApp
                     }
                     try
                     {
-                        Thread.sleep(100000);
+                        Thread.sleep(5000);
                     }
                     catch (InterruptedException e)
                     {

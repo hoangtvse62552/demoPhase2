@@ -40,4 +40,10 @@ public class DirectController
         loginPage.setVisible(true);
         homePage.setVisible(false);
     }
+
+    public void setLoginPage(LoginPage loginPage)
+    {
+        this.loginPage = loginPage;
+    }
+
 }
