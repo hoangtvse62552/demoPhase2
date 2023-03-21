@@ -1,15 +1,19 @@
 package ui;
 
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import controller.AccountController;
 import controller.DirectController;
 import model.Account;
 
-import java.awt.*;
-import java.awt.event.*;
-
-public class LoginPage extends Frame implements ActionListener
+public class LoginPage extends JFrame implements ActionListener
 {
     /**
      * 
@@ -67,7 +71,7 @@ public class LoginPage extends Frame implements ActionListener
 
         if (e.getSource() == btnLogin)
         {
-            String password = txtPassword.getText();
+            String password = String.valueOf(txtPassword.getPassword());
             String username = txtUsername.getText();
             if (!password.trim().equals("") && !username.trim().equals(""))
             {
