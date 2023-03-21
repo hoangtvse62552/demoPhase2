@@ -1,6 +1,7 @@
 package main;
 
 import controller.DirectController;
+import logger.ClientLogger;
 import ui.LoginPage;
 import utils.ConnectManager;
 
@@ -36,13 +37,13 @@ public class ClientApp
                         System.out.println("Server cannot connect!");
                         controller.alertServerStatus(!flag);
                     }
-
                     try
                     {
                         Thread.sleep(5000);
                     }
                     catch (InterruptedException e)
                     {
+                        ClientLogger.getInstance().writeLog(e.getStackTrace());
                         e.printStackTrace();
                     }
                 }

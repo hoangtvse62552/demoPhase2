@@ -16,7 +16,6 @@ public class BookController
     private Map<Integer, String> authors   = new HashMap<>();
     private List<Publisher>      publisherList;
     private List<Author>         authorList;
-    private Map<Integer, Book>   bookMap;
     private BookService          service;
 
     public BookController()

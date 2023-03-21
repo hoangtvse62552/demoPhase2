@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import logger.ServerLogger;
 import model.Author;
 import model.Book;
 import model.Publisher;
@@ -72,6 +74,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -108,6 +111,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -143,6 +147,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -177,6 +182,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -190,6 +196,7 @@ public class BookService
                 }
                 catch (Exception e2)
                 {
+                    ServerLogger.getInstance().writeLog(e2.getStackTrace());
                     e2.printStackTrace();
                 }
             }
@@ -217,6 +224,7 @@ public class BookService
         }
         catch (Exception e)
         {
+            ServerLogger.getInstance().writeLog(e.getStackTrace());
             e.printStackTrace();
         }
     }
@@ -282,9 +290,11 @@ public class BookService
                     }
                     catch (SQLException excep)
                     {
+                        ServerLogger.getInstance().writeLog(excep.getStackTrace());
                         System.out.println(excep);
                     }
                 }
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -301,32 +311,33 @@ public class BookService
         boolean check = false;
         DBManager db = new DBManager();
         con = db.connectDB2();
-        int bookId = -1;
+        long bookId = -1;
         if (con != null)
         {
             try
             {
-                String sql = "SELECT BOOK_ID FROM FINAL TABLE ( INSERT INTO BOOKS (NAME, DESCRIPTION, CREATE_TIME, UPDATE_TIME, PUBLISHER_ID) VALUES(?, ?, ?, ?, ?))";
-//                String sql = "INSERT INTO BOOKS (NAME, DESCRIPTION, CREATE_TIME, UPDATE_TIME, PUBLISHER_ID) VALUES( ?, ?, ?, ?, ?)";
-                stm = con.prepareStatement(sql);
+//                String sql = "SELECT BOOK_ID FROM FINAL TABLE ( INSERT INTO BOOKS (NAME, DESCRIPTION, CREATE_TIME, UPDATE_TIME, PUBLISHER_ID) VALUES(?, ?, ?, ?, ?))";
+                String sql = "INSERT INTO BOOKS (NAME, DESCRIPTION, CREATE_TIME, UPDATE_TIME, PUBLISHER_ID) VALUES( ?, ?, ?, ?, ?)";
+                stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stm.setString(1, book.getName());
                 stm.setString(2, book.getDescription());
                 String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
                 stm.setString(3, timeStamp);
                 stm.setString(4, timeStamp);
                 stm.setInt(5, book.getPublisherId());
-                rs = stm.executeQuery();
-                if (rs != null)
+                int x = stm.executeUpdate();
+                if (x != 0)
                 {
+                    rs = stm.getGeneratedKeys();
                     if (rs.next())
                     {
-                        bookId = rs.getInt("book_id");
+                        bookId = rs.getLong("book_id");
                         for (Integer id : book.getAuthorId())
                         {
                             String sql1 = "INSERT INTO BOOK_AUTHORS (AUTHOR_ID, BOOK_ID) VALUES(?, ?)";
                             stm = con.prepareStatement(sql1);
                             stm.setInt(1, id);
-                            stm.setInt(2, bookId);
+                            stm.setLong(2, bookId);
                             int rs = stm.executeUpdate();
                             if (rs != 1)
                             {
@@ -340,6 +351,8 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                e.printStackTrace();
                 if (con != null)
                 {
                     try
@@ -349,10 +362,10 @@ public class BookService
                     }
                     catch (SQLException excep)
                     {
+                        ServerLogger.getInstance().writeLog(excep.getStackTrace());
                         System.out.println(excep);
                     }
                 }
-                e.printStackTrace();
             }
             finally
             {
@@ -381,6 +394,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -416,13 +430,7 @@ public class BookService
 
                 if (authorId != -1)
                 {
-                    sql = "SELECT * , k.NAME AS author_name \r\n"
-                            + "FROM BOOKS b \r\n"
-                            + "LEFT JOIN BOOK_AUTHORS o ON b.BOOK_ID = o.BOOK_ID \r\n"
-                            + "LEFT JOIN AUTHORS k ON k.AUTHOR_ID = o.AUTHOR_ID \r\n"
-                            + "WHERE (b.BOOK_ID  IN  (SELECT BOOK_ID  FROM BOOK_AUTHORS z WHERE z.AUTHOR_ID = ?)) \r\n"
-                            + "AND b.NAME LIKE ?\r\n"
-                            + "ORDER BY b.BOOK_ID ";
+                    sql = "SELECT * , k.NAME AS author_name \r\n" + "FROM BOOKS b \r\n" + "LEFT JOIN BOOK_AUTHORS o ON b.BOOK_ID = o.BOOK_ID \r\n" + "LEFT JOIN AUTHORS k ON k.AUTHOR_ID = o.AUTHOR_ID \r\n" + "WHERE (b.BOOK_ID  IN  (SELECT BOOK_ID  FROM BOOK_AUTHORS z WHERE z.AUTHOR_ID = ?)) \r\n" + "AND b.NAME LIKE ?\r\n" + "ORDER BY b.BOOK_ID ";
                     stm = con.prepareStatement(sql);
                     stm.setInt(1, authorId);
                     stm.setString(2, "%" + searchString + "%");
@@ -472,6 +480,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
@@ -537,6 +546,7 @@ public class BookService
             }
             catch (Exception e)
             {
+                ServerLogger.getInstance().writeLog(e.getStackTrace());
                 e.printStackTrace();
             }
             finally
