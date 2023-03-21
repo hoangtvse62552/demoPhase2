@@ -48,7 +48,7 @@ public class AccountService
         }
         catch (Exception e)
         {
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
             e.printStackTrace();
         }
         finally
@@ -78,7 +78,7 @@ public class AccountService
         }
         catch (Exception e)
         {
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
             e.printStackTrace();
         }
     }

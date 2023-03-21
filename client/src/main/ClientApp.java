@@ -39,11 +39,11 @@ public class ClientApp
                     }
                     try
                     {
-                        Thread.sleep(5000);
+                        Thread.sleep(100000);
                     }
                     catch (InterruptedException e)
                     {
-                        ClientLogger.getInstance().writeLog(e.getStackTrace());
+                        ClientLogger.getInstance().writeLog(e);
                         e.printStackTrace();
                     }
                 }
