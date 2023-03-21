@@ -8,13 +8,22 @@ public class ClientApp
 {
     private static DirectController controller;
 
+    private static LoginPage        loginPage;
+
     public static void main(String[] args)
     {
         controller = new DirectController();
-        LoginPage loginPage = new LoginPage(controller);
-        loginPage.setVisible(true);
 
-        Thread serverPingThread = new Thread()
+        new Thread()
+        {
+            public void run()
+            {
+                loginPage = new LoginPage(controller);
+                loginPage.setVisible(true);
+            }
+        }.start();
+
+        new Thread()
         {
             public void run()
             {
@@ -22,10 +31,10 @@ public class ClientApp
                 while (true)
                 {
                     boolean flag = connectManager.pingServer();
-
                     if (!flag)
                     {
                         System.out.println("Server cannot connect!");
+                        controller.alertServerStatus(!flag);
                     }
 
                     try
@@ -38,8 +47,6 @@ public class ClientApp
                     }
                 }
             }
-        };
-        serverPingThread.start();
-
+        }.start();
     }
 }

@@ -2,11 +2,12 @@ package controller;
 
 import ui.HomePage;
 import ui.LoginPage;
+import utils.LoggerUtils;
 
 public class DirectController
 {
     LoginPage loginPage;
-    HomePage  homepage;
+    HomePage  homePage;
 
     public DirectController()
     {
@@ -17,14 +18,26 @@ public class DirectController
     {
         System.out.println("DirectController: Login success");
         this.loginPage = loginPage;
-        homepage = new HomePage(isAdmin, this);
+        this.homePage = new HomePage(isAdmin, this);
         this.loginPage.setVisible(false);
-        homepage.setVisible(true);
+        this.homePage.setVisible(true);
+    }
+
+    public void alertServerStatus(boolean isConnected)
+    {
+        if (loginPage != null && loginPage.isVisible())
+        {
+            LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
+        }
+        if (homePage != null && homePage.isVisible())
+        {
+            LoggerUtils.alert(homePage, "Server cannot connected!", "Warning");
+        }
     }
 
     public void logout()
     {
         loginPage.setVisible(true);
-        homepage.setVisible(false);
+        homePage.setVisible(false);
     }
 }

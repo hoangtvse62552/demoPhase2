@@ -36,7 +36,6 @@ public class ServerApp
                 // get input
                 is = socket.getInputStream();
                 os = socket.getOutputStream();
-                System.out.println("InputStream: " + is + " OutputStream: " + os);
                 AccountController accountController = new AccountController(os);
                 BookController bookController = new BookController(os);
 
@@ -44,14 +43,15 @@ public class ServerApp
                 {
                     String xmlString = "";
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                    System.out.println(reader == null);
-                    String line = "";
 
-                    while (reader.readLine() != null && !(line = reader.readLine()).isEmpty())
+                    String line = reader.readLine();
+                    while (line != null && !line.isEmpty())
                     {
-                        System.out.println(line);
                         xmlString += line;
+                        line = reader.readLine();
                     }
+
+                    System.out.println(xmlString);
                     if (xmlString.length() > 0)
                     {
                         RequestModel req = utils.convertXmlToRequest(xmlString);
