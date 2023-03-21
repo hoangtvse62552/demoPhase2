@@ -48,7 +48,7 @@ public class AccountController
         }
         catch (Exception e)
         {
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
             e.printStackTrace();
         }
         finally

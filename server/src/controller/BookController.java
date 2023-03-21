@@ -40,7 +40,7 @@ public class BookController
         {
             resp.setStatus("Fail");
             e.printStackTrace();
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {
@@ -68,7 +68,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {
@@ -95,7 +95,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {
@@ -122,7 +122,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {
@@ -147,7 +147,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {
@@ -171,7 +171,7 @@ public class BookController
         catch (Exception e)
         {
             e.printStackTrace();
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
             resp.setStatus("Fail");
         }
         finally
@@ -198,7 +198,7 @@ public class BookController
         {
             e.printStackTrace();
             resp.setStatus("Fail");
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
         }
         finally
         {

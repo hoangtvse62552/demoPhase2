@@ -74,7 +74,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -111,7 +111,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -147,7 +147,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -182,7 +182,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -196,7 +196,7 @@ public class BookService
                 }
                 catch (Exception e2)
                 {
-                    ServerLogger.getInstance().writeLog(e2.getStackTrace());
+                    ServerLogger.getInstance().writeLog(e2);
                     e2.printStackTrace();
                 }
             }
@@ -224,7 +224,7 @@ public class BookService
         }
         catch (Exception e)
         {
-            ServerLogger.getInstance().writeLog(e.getStackTrace());
+            ServerLogger.getInstance().writeLog(e);
             e.printStackTrace();
         }
     }
@@ -290,11 +290,11 @@ public class BookService
                     }
                     catch (SQLException excep)
                     {
-                        ServerLogger.getInstance().writeLog(excep.getStackTrace());
+                        ServerLogger.getInstance().writeLog(excep);
                         System.out.println(excep);
                     }
                 }
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -351,7 +351,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
                 if (con != null)
                 {
@@ -362,7 +362,7 @@ public class BookService
                     }
                     catch (SQLException excep)
                     {
-                        ServerLogger.getInstance().writeLog(excep.getStackTrace());
+                        ServerLogger.getInstance().writeLog(excep);
                         System.out.println(excep);
                     }
                 }
@@ -394,7 +394,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -480,7 +480,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally
@@ -546,7 +546,7 @@ public class BookService
             }
             catch (Exception e)
             {
-                ServerLogger.getInstance().writeLog(e.getStackTrace());
+                ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
             finally

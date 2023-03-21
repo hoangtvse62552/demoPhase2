@@ -87,14 +87,14 @@ public class ServerApp
                 }
                 catch (Exception e)
                 {
-                    ServerLogger.getInstance().writeLog(e.getStackTrace());
+                    ServerLogger.getInstance().writeLog(e);
                     e.printStackTrace();
                 }
             }
         }
         catch (Exception ex)
         {
-            ServerLogger.getInstance().writeLog(ex.getStackTrace());
+            ServerLogger.getInstance().writeLog(ex);
             ex.printStackTrace();
         }
         System.out.println("Sv is closed");

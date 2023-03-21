@@ -36,7 +36,7 @@ public class ConnectManager
         catch (Exception e)
         {
             e.printStackTrace();
-            ClientLogger.getInstance().writeLog(e.getStackTrace());
+            ClientLogger.getInstance().writeLog(e);
         }
         return null;
     }
@@ -55,8 +55,7 @@ public class ConnectManager
         catch (Exception e)
         {
             System.out.println("Server is down or unreachable");
-            e.printStackTrace();
-            ClientLogger.getInstance().writeLog(e.getStackTrace());
+            ClientLogger.getInstance().writeLog(e);
             return false;
         }
         return true;
