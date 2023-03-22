@@ -1,0 +1,18 @@
+{
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.completion.filteredTypes": [
+        "com.sun.*",
+        "sun.*",
+        "jdk.*",
+        "org.graalvm.*",
+        "io.micrometer.shaded.*"
+    ],
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "/home/ttl/.sdkman/candidates/java/17.0.6-amzn",
+            "sources": "/home/ttl/.sdkman/candidates/java/17.0.6-amzn/lib/src.zip"
+        }
+    ],
+    "java.dependency.packagePresentation": "hierarchical"
+}

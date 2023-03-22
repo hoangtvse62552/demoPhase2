@@ -27,6 +27,7 @@ public class DirectController
     {
         if (loginPage != null && loginPage.isVisible())
         {
+            System.out.println(loginPage);
             LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
         }
         if (homePage != null && homePage.isVisible())
@@ -35,20 +36,19 @@ public class DirectController
         }
     }
 
-    public void logout()
-    {
-        loginPage.setVisible(true);
-        homePage.setVisible(false);
-    }
-
-    public void setLoginPage(LoginPage loginPage)
-    {
-        this.loginPage = loginPage;
-    }
+    // public LoginPage getLoginPage()
+    // {
+    // return loginPage;
+    // }
 
     public HomePage getHomePage()
     {
         return homePage;
     }
 
+    public void logout()
+    {
+        loginPage.setVisible(true);
+        homePage.setVisible(false);
+    }
 }
