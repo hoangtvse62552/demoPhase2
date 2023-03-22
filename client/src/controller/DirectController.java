@@ -46,4 +46,9 @@ public class DirectController
         this.loginPage = loginPage;
     }
 
+    public HomePage getHomePage()
+    {
+        return homePage;
+    }
+
 }

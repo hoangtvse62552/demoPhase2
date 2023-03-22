@@ -24,4 +24,10 @@ public class LoggerUtils
     {
         JOptionPane.showMessageDialog(frame.getRootPane(), msg, title, JOptionPane.ERROR_MESSAGE);
     }
+
+    public static int alertConfirm(JFrame frame, String msg, String title)
+    {
+        int rs = JOptionPane.showConfirmDialog(frame, msg, title, JOptionPane.YES_NO_OPTION);
+        return rs;
+    }
 }
