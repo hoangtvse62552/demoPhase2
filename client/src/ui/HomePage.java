@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import javax.swing.JTable;
@@ -29,6 +30,8 @@ import javax.swing.table.TableCellRenderer;
 import controller.BookController;
 import controller.DirectController;
 import model.*;
+import ui.model.TableModel;
+import utils.LoggerUtils;
 
 import java.awt.Component;
 
@@ -40,7 +43,7 @@ public class HomePage extends JFrame
     private static final long            serialVersionUID = 1L;
     private List<Book>                   books;
     private JTable                       tblBook;
-    private DefaultTableModel            model;
+    private TableModel                   tableModel;
     private JButton                      btnCreate;
     private BookController               sv;
 
@@ -102,25 +105,26 @@ public class HomePage extends JFrame
         btnSearch = new JButton("Search");
         btnSearch.setBounds(700, 0, 100, 20);
         // -------------------------------------
-        model = new DefaultTableModel();
-        tblBook = new JTable(model);
+        tableModel = new TableModel();
+        tblBook = new JTable(tableModel);
+        tblBook.setAutoCreateRowSorter(true);
 
         // Table show books
         JScrollPane pane = new JScrollPane(tblBook);
-        pane.setBounds(0, 20, 800, 200);
+        pane.setBounds(0, 20, 800, 230);
 
         // add book layout
         lbName = new JLabel("Name");
-        lbName.setBounds(10, 260, 80, 20);
+        lbName.setBounds(150, 260, 80, 20);
         lbAuthor = new JLabel("Author");
-        lbAuthor.setBounds(10, 290, 80, 20);
+        lbAuthor.setBounds(150, 290, 80, 20);
         lbPublisher = new JLabel("Publisher");
-        lbPublisher.setBounds(10, 320, 80, 20);
+        lbPublisher.setBounds(150, 320, 80, 20);
         lbDescription = new JLabel("Description");
-        lbDescription.setBounds(10, 350, 80, 20);
+        lbDescription.setBounds(150, 350, 80, 20);
 
         txtName = new JTextField();
-        txtName.setBounds(100, 260, 200, 20);
+        txtName.setBounds(240, 260, 200, 20);
 
         cbAuthorModel = new DefaultComboBoxModel<String>();
         cbAuthor = new JComboBox<String>()
@@ -135,23 +139,23 @@ public class HomePage extends JFrame
 
         };
         cbAuthor.setModel(cbAuthorModel);
-        cbAuthor.setBounds(100, 290, 200, 20);
+        cbAuthor.setBounds(240, 290, 200, 20);
 
         cbPublisherModel = new DefaultComboBoxModel<String>();
         cbPublisher = new JComboBox<>();
         cbPublisher.setModel(cbPublisherModel);
-        cbPublisher.setBounds(100, 320, 200, 20);
+        cbPublisher.setBounds(240, 320, 200, 20);
         txtDescription = new JTextArea();
-        txtDescription.setBounds(100, 350, 200, 50);
+        txtDescription.setBounds(240, 350, 200, 50);
 
         btnCreate = new JButton("Add");
-        btnCreate.setBounds(450, 260, 80, 20);
+        btnCreate.setBounds(500, 260, 80, 20);
 
         btnUpdate = new JButton("Update");
-        btnUpdate.setBounds(450, 300, 80, 20);
+        btnUpdate.setBounds(500, 300, 80, 20);
 
         btnDelete = new JButton("Delete");
-        btnDelete.setBounds(450, 340, 80, 20);
+        btnDelete.setBounds(500, 340, 80, 20);
 
         error = new JLabel("Error");
         error.setBounds(300, 430, 200, 20);
@@ -239,28 +243,7 @@ public class HomePage extends JFrame
     private void getBooks()
     {
         books = sv.getBooks();
-        initTable();
-    }
-
-    private void initTable()
-    {
-        for (int i = model.getRowCount() - 1; i >= 0; i--)
-        {
-            model.removeRow(i);
-        }
-        String[] columnName = { "BookId", "Name", "Author", "Publisher", "Description" };
-        model.setColumnIdentifiers(columnName);
-        int count = 0;
-        for (Book book : books)
-        {
-            Object[] row = new Object[7];
-            row[0] = book.getId();
-            row[1] = book.getName();
-            row[2] = book.getAuthor();
-            row[3] = book.getPublisher();
-            row[4] = book.getDescription();
-            model.insertRow(count++, row);
-        }
+        tableModel.initData(books);
     }
 
     private void addListner()
@@ -362,7 +345,7 @@ public class HomePage extends JFrame
                 if (bookSearchs != null)
                 {
                     books = bookSearchs;
-                    initTable();
+                    tableModel.initData(books);
                 }
             }
         });
@@ -372,10 +355,14 @@ public class HomePage extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                boolean rs = sv.deleteBook(currentEdit.getId());
-                if (rs)
+                int option = LoggerUtils.alertConfirm(controller.getHomePage(), "Are u sure about that", "");
+                if (option == JOptionPane.YES_OPTION)
                 {
-                    getBooks();
+                    boolean rs = sv.deleteBook(currentEdit.getId());
+                    if (rs)
+                    {
+                        getBooks();
+                    }
                 }
             }
         });
