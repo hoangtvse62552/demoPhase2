@@ -27,12 +27,23 @@ public class DirectController
     {
         if (loginPage != null && loginPage.isVisible())
         {
+            System.out.println(loginPage);
             LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
         }
         if (homePage != null && homePage.isVisible())
         {
             LoggerUtils.alert(homePage, "Server cannot connected!", "Warning");
         }
+    }
+
+    // public LoginPage getLoginPage()
+    // {
+    // return loginPage;
+    // }
+
+    public HomePage getHomePage()
+    {
+        return homePage;
     }
 
     public void logout()
