@@ -50,10 +50,12 @@ public class ConnectManager
             InetSocketAddress address = new InetSocketAddress(serverCfg.getServerIp(), serverCfg.getServerPort());
             socket.connect(address, 1000); // timeout in milliseconds
 
+            System.out.println("=================================");
             System.out.println("Server is up and reachable");
         }
         catch (Exception e)
         {
+            System.out.println("=================================");
             System.out.println("Server is down or unreachable");
             ClientLogger.getInstance().writeLog(e);
             return false;

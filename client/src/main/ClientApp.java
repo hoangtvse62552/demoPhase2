@@ -1,9 +1,9 @@
 package main;
 
 import controller.DirectController;
+import controller.ServerController;
 import logger.ClientLogger;
 import ui.LoginPage;
-import utils.ConnectManager;
 
 public class ClientApp
 {
@@ -14,24 +14,17 @@ public class ClientApp
     public static void main(String[] args)
     {
         controller = new DirectController();
-
         loginPage = new LoginPage(controller);
         loginPage.setVisible(true);
-        controller.setLoginPage(loginPage);
 
         new Thread()
         {
             public void run()
             {
-                ConnectManager connectManager = new ConnectManager();
+                ServerController serverController = new ServerController(loginPage, controller.getHomePage());
                 while (true)
                 {
-                    boolean flag = connectManager.pingServer();
-                    if (!flag)
-                    {
-                        System.out.println("Server cannot connect!");
-                        controller.alertServerStatus(!flag);
-                    }
+                    serverController.pingServer();
                     try
                     {
                         Thread.sleep(5000);

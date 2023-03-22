@@ -6,6 +6,11 @@ import response.AccountResponse;
 import utils.ConnectManager;
 import utils.XmlUtils;
 
+/**
+ * Account service
+ * @author ttl
+ *
+ */
 public class AccountService
 {
     public Account login(String username, String password)
@@ -25,15 +30,19 @@ public class AccountService
 
         AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(xmlRq);
 
-        if ("Success".equals(accountResponse.getStatus()))
+        if (accountResponse != null)
         {
-            account.setAdmin(accountResponse.isAdmin());
+            if ("Success".equals(accountResponse.getStatus()))
+            {
+                account.setAdmin(accountResponse.isAdmin());
+            }
+            else
+            {
+                System.out.println(accountResponse.getError());
+                return null;
+            }
         }
-        else
-        {
-            System.out.println(accountResponse.getError());
-            return null;
-        }
+
         return account;
     }
 }
