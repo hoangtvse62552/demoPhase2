@@ -2,7 +2,6 @@ package controller;
 
 import ui.HomePage;
 import ui.LoginPage;
-import utils.LoggerUtils;
 
 public class DirectController
 {
@@ -21,19 +20,6 @@ public class DirectController
         this.homePage = new HomePage(isAdmin, this);
         this.loginPage.setVisible(false);
         this.homePage.setVisible(true);
-    }
-
-    public void alertServerStatus(boolean isConnected)
-    {
-        if (loginPage != null && loginPage.isVisible())
-        {
-            System.out.println(loginPage);
-            LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
-        }
-        if (homePage != null && homePage.isVisible())
-        {
-            LoggerUtils.alert(homePage, "Server cannot connected!", "Warning");
-        }
     }
 
     public HomePage getHomePage()
