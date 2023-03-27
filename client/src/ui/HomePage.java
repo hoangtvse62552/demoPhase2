@@ -129,7 +129,7 @@ public class HomePage extends JFrame
         cbAuthor = new JComboBox<String>()
         {
 
-            @Override
+			@Override
             public void setPopupVisible(boolean v)
             {
                 if (v)
@@ -371,7 +371,6 @@ public class HomePage extends JFrame
             @Override
             public void mouseReleased(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
@@ -400,21 +399,18 @@ public class HomePage extends JFrame
             @Override
             public void mouseExited(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseEntered(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
         });

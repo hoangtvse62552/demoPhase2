@@ -76,6 +76,10 @@ public class BookController
         }
     }
 
+    /**
+     * Update book by id
+     * @param request: XML request protocol
+     */
     public void updateBook(RequestModel request)
     {
 

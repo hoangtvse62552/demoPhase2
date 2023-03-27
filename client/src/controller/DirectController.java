@@ -36,11 +36,6 @@ public class DirectController
         }
     }
 
-    // public LoginPage getLoginPage()
-    // {
-    // return loginPage;
-    // }
-
     public HomePage getHomePage()
     {
         return homePage;

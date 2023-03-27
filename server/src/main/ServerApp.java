@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import controller.AccountController;
 import controller.BookController;
 import logger.ServerLogger;
@@ -22,6 +21,8 @@ public class ServerApp
     public static void main(String[] args)
     {
         System.out.println("Server is running...");
+        System.out.println(System.getProperty("user.dir"));
+
         utils = new Utils();
 
         // connect socket
@@ -41,19 +42,19 @@ public class ServerApp
                 BookController bookController = new BookController(os);
                 try
                 {
-                    String xmlString = "";
+                    StringBuilder xmlString = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                     String line = reader.readLine();
 
                     while (line != null && !line.isEmpty())
                     {
                         System.out.println(line);
-                        xmlString += line;
+                        xmlString.append(line);
                         line = reader.readLine();
                     }
                     if (xmlString.length() > 0)
                     {
-                        RequestModel req = utils.convertXmlToRequest(xmlString);
+                        RequestModel req = utils.convertXmlToRequest(xmlString.toString());
                         switch (req.getAction())
                         {
                         case "Login":

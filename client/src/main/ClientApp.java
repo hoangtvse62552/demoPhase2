@@ -17,6 +17,7 @@ public class ClientApp
         loginPage = new LoginPage(controller);
         loginPage.setVisible(true);
 
+        // New simultaneously thread. It is used to test connection between client and server.
         new Thread()
         {
             public void run()

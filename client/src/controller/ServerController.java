@@ -17,6 +17,9 @@ public class ServerController
         this.homePage = homePage;
     }
 
+    /**
+     * Test connection between client and server.
+     */
     public void pingServer()
     {
         ConnectManager connectManager = new ConnectManager();
@@ -34,11 +37,11 @@ public class ServerController
     {
         if (loginPage != null && loginPage.isVisible())
         {
-            LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
+            LoggerUtils.alert(loginPage, "Server cannot connected!");
         }
         if (homePage != null && homePage.isVisible())
         {
-            LoggerUtils.alert(homePage, "Server cannot connected!", "Warning");
+            LoggerUtils.alert(homePage, "Server cannot connected!");
         }
     }
 }
