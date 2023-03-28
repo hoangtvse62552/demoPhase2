@@ -2,29 +2,30 @@ package main;
 
 import controller.DirectController;
 import controller.ServerController;
-import logger.ClientLogger;
 import ui.LoginPage;
 
 public class ClientApp
 {
-    private static DirectController controller;
-
-    private static LoginPage        loginPage;
 
     public static void main(String[] args)
     {
-        controller = new DirectController();
-        loginPage = new LoginPage(controller);
+        LoginPage loginPage = new LoginPage();
         loginPage.setVisible(true);
+        DirectController directController = DirectController.getInstance();
+        directController.setLoginPage(loginPage);
 
         // New simultaneously thread. It is used to test connection between client and server.
         new Thread()
         {
             public void run()
             {
-                ServerController serverController = new ServerController(loginPage, controller.getHomePage());
+                System.out.println("Main app: ==============");
+                System.out.println(directController.getHomePage());
+                ServerController serverController = new ServerController();
                 while (true)
                 {
+                    serverController.setLoginPage(loginPage);
+                    serverController.setHomePage(directController.getHomePage());
                     serverController.pingServer();
                     try
                     {
@@ -32,7 +33,7 @@ public class ClientApp
                     }
                     catch (InterruptedException e)
                     {
-                        ClientLogger.getInstance().writeLog(e);
+                        // ClientLogger.getInstance().writeLog(e);
                         e.printStackTrace();
                     }
                 }

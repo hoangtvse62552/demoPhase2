@@ -31,9 +31,10 @@ public class ServerApp
 
             System.out.println("Server is listening on port " + 9090);
 
+            Socket socket;
             while (true)
             {
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
                 // get input
                 is = socket.getInputStream();

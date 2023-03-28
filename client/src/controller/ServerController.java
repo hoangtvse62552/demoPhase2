@@ -1,5 +1,6 @@
 package controller;
 
+import lombok.Setter;
 import ui.HomePage;
 import ui.LoginPage;
 import utils.ConnectManager;
@@ -8,13 +9,11 @@ import utils.LoggerUtils;
 public class ServerController
 {
 
-    private LoginPage loginPage;
-    private HomePage  homePage;
+    private @Setter LoginPage loginPage;
+    private @Setter HomePage  homePage;
 
-    public ServerController(LoginPage loginPage, HomePage homePage)
+    public ServerController()
     {
-        this.loginPage = loginPage;
-        this.homePage = homePage;
     }
 
     /**
