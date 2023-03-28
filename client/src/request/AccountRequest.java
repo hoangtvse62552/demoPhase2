@@ -3,11 +3,11 @@ package request;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name = "AccountRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AccountRequest extends RequestModel
+@XmlType(name = "accountRequest")
+public class AccountRequest
 {
     @XmlElement(name = "username")
     private String username;
@@ -23,6 +23,16 @@ public class AccountRequest extends RequestModel
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public String getPassword()
+    {
+        return password;
     }
 
 }

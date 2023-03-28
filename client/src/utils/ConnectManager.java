@@ -26,12 +26,13 @@ public class ConnectManager
             String line = reader.readLine();
             while (!line.isEmpty())
             {
+                System.out.println(line);
                 xmlRp.append(line);
                 line = reader.readLine();
             }
 
             XmlUtils xmlUtil = new XmlUtils();
-            return xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
+            return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
         }
         catch (Exception e)
         {

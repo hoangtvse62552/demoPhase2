@@ -2,12 +2,15 @@ package service;
 
 import model.Account;
 import request.AccountRequest;
+import request.RequestModel;
 import response.AccountResponse;
+import response.ResponseModel;
 import utils.ConnectManager;
 import utils.XmlUtils;
 
 /**
  * Account service
+ * 
  * @author ttl
  *
  */
@@ -17,24 +20,27 @@ public class AccountService
     {
         Account account = new Account();
 
-        AccountRequest rq = new AccountRequest();
+        RequestModel<AccountRequest> rq = new RequestModel<>();
+        AccountRequest accountReq = new AccountRequest();
+        accountReq.setPassword(password);
+        accountReq.setUsername(username);
+        rq.setData(accountReq);
         rq.setAction("Login");
-        rq.setPassword(password);
-        rq.setUsername(username);
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(rq);
+        XmlUtils<RequestModel<AccountRequest>> util = new XmlUtils<>();
+        String xmlRq = util.convertObjectToXml(rq);
 
+        System.out.println(xmlRq);
         // Get connection
         ConnectManager connectManager = new ConnectManager();
 
-        AccountResponse accountResponse = (AccountResponse) connectManager.getResponse(xmlRq);
+        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(xmlRq);
 
         if (accountResponse != null)
         {
             if ("Success".equals(accountResponse.getStatus()))
             {
-                account.setAdmin(accountResponse.isAdmin());
+                account.setAdmin(accountResponse.getResult().isAdmin());
             }
             else
             {

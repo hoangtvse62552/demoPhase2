@@ -8,16 +8,20 @@ import logger.ServerLogger;
 import model.Author;
 import model.Book;
 import model.Publisher;
+import request.AccountRequest;
 import request.BookRequest;
 import request.RequestModel;
+import response.AccountResponse;
 import response.BookResponse;
+import response.ResponseModel;
 import service.BookService;
 import utils.Utils;
 
 public class BookController
 {
-    private Utils        utils = new Utils();
-    private OutputStream os    = null;
+    private Utils<BookResponse> utilsResponse = new Utils<>();
+    private Utils<BookRequest>  utilsReq      = new Utils<>();
+    private OutputStream        os            = null;
 
     public BookController(OutputStream os)
     {
@@ -27,12 +31,15 @@ public class BookController
 
     public void getBooks()
     {
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
             BookService sv = new BookService();
             List<Book> books = sv.getBooksVer2();
-            resp.setBooks(books);
+            BookResponse bookResp = new BookResponse();
+            bookResp.setBooks(books);
+
+            resp.setResult(bookResp);
             resp.setStatus("Success");
 
         }
@@ -44,18 +51,19 @@ public class BookController
         }
         finally
         {
+            resp.setAction("GetBook");
             sendResponse(resp);
         }
     }
 
-    public void deleteBook(RequestModel request)
+    public void deleteBook(String xmlString)
     {
 
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
-            BookRequest bookReq = (BookRequest) request;
-            int id = bookReq.getBook().getId();
+            RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
+            int id = bookReq.getData().getBook().getId();
 
             BookService sv = new BookService();
             boolean result = sv.deleteBook(id);
@@ -72,18 +80,19 @@ public class BookController
         }
         finally
         {
+            resp.setAction("Delete");
             sendResponse(resp);
         }
     }
 
-    public void updateBook(RequestModel request)
+    public void updateBook(String xmlString)
     {
 
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
-            BookRequest bookReq = (BookRequest) request;
-            Book dto = bookReq.getBook();
+            RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
+            Book dto = bookReq.getData().getBook();
             BookService sv = new BookService();
             boolean result = sv.updateBook(dto);
             if (result)
@@ -99,18 +108,19 @@ public class BookController
         }
         finally
         {
+            resp.setAction("Update");
             sendResponse(resp);
         }
     }
 
-    public void createBook(RequestModel request)
+    public void createBook(String xmlString)
     {
 
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
-            BookRequest bookReq = (BookRequest) request;
-            Book dto = bookReq.getBook();
+            RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
+            Book dto = bookReq.getData().getBook();
             BookService sv = new BookService();
             boolean result = sv.addBook(dto);
             if (result)
@@ -126,18 +136,22 @@ public class BookController
         }
         finally
         {
+            resp.setAction("Create");
             sendResponse(resp);
         }
     }
 
     public void getPublisher()
     {
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
             BookService sv = new BookService();
             List<Publisher> result = sv.getPublisherList();
-            resp.setPublishers(result);
+            BookResponse bookResp = new BookResponse();
+            bookResp.setPublishers(result);
+
+            resp.setResult(bookResp);
             if (result != null)
                 resp.setStatus("Success");
             else
@@ -151,18 +165,22 @@ public class BookController
         }
         finally
         {
+            resp.setAction("GetPublisher");
             sendResponse(resp);
         }
     }
 
     public void getAuthor()
     {
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
         try
         {
             BookService sv = new BookService();
             List<Author> result = sv.getAuthorList();
-            resp.setAuthors(result);
+            BookResponse bookResp = new BookResponse();
+            bookResp.setAuthors(result);
+            resp.setResult(bookResp);
+
             if (result != null)
                 resp.setStatus("Success");
             else
@@ -176,22 +194,26 @@ public class BookController
         }
         finally
         {
+            resp.setAction("GetAuthor");
             sendResponse(resp);
         }
     }
 
-    public void searchBooks(RequestModel request)
+    public void searchBooks(String xmlString)
     {
-        BookResponse resp = new BookResponse();
+        ResponseModel<BookResponse> resp = new ResponseModel<>();
+        BookResponse bookResp = new BookResponse();
         try
         {
-            BookRequest bookReq = (BookRequest) request;
-            Book dto = bookReq.getBook();
-
+            System.out.println("Begin convert");
+            RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
+            Book dto = bookReq.getData().getBook();
+            System.out.println("end convert");
             BookService sv = new BookService();
-            System.out.println(dto.toString() + " ---" + dto.getAuthorId().get(0));
             List<Book> books = sv.searchBooks(dto.getName(), dto.getAuthorId().get(0));
-            resp.setBooks(books);
+            System.out.println("end  search service");
+            bookResp.setBooks(books);
+            resp.setResult(bookResp);
             resp.setStatus("Success");
         }
         catch (Exception e)
@@ -202,13 +224,14 @@ public class BookController
         }
         finally
         {
+            resp.setAction("Search");
             sendResponse(resp);
         }
     }
 
-    private void sendResponse(BookResponse resp)
+    private void sendResponse(ResponseModel<BookResponse> resp)
     {
-        String responseStr = utils.convertResponseToXml(resp);
+        String responseStr = utilsResponse.convertObjectToXml(resp);
         PrintWriter writer = new PrintWriter(os, true);
         writer.println(responseStr);
     }

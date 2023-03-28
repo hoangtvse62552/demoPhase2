@@ -339,7 +339,7 @@ public class BookService
                             stm.setInt(1, id);
                             stm.setLong(2, bookId);
                             int rs = stm.executeUpdate();
-                            if (rs != 1)
+                            if (rs == 0)
                             {
                                 return false;
                             }

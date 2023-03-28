@@ -8,7 +8,7 @@ import model.Book;
 
 @XmlRootElement(name = "BookRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BookRequest extends RequestModel
+public class BookRequest 
 {
     @XmlElement(name = "book")
     private Book book;

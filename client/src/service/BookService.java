@@ -7,6 +7,7 @@ import model.Author;
 import model.Book;
 import model.Publisher;
 import request.BookRequest;
+import request.RequestModel;
 import response.BookResponse;
 import response.ResponseModel;
 import utils.ConnectManager;
@@ -14,20 +15,23 @@ import utils.XmlUtils;
 
 public class BookService
 {
+    private XmlUtils<RequestModel<BookRequest>> util = new XmlUtils<>();
+
     public List<Book> getBooks()
     {
         System.out.println("get books");
         List<Book> books = new ArrayList<>();
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
+        BookRequest book = new BookRequest();
         req.setAction("GetBook");
+        req.setData(book);
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
-            books = resp.getBooks();
+            books = resp.getResult().getBooks();
         }
 
         return books;
@@ -37,16 +41,15 @@ public class BookService
     {
         System.out.println("Get publishers");
         List<Publisher> publishers = new ArrayList<>();
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
         req.setAction("GetPublisher");
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
-            publishers = resp.getPublishers();
+            publishers = resp.getResult().getPublishers();
         }
         return publishers;
     }
@@ -55,16 +58,15 @@ public class BookService
     {
         System.out.println("Get authors");
         List<Author> authors = new ArrayList<>();
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
         req.setAction("GetAuthor");
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
-            authors = resp.getAuthors();
+            authors = resp.getResult().getAuthors();
         }
         return authors;
     }
@@ -79,19 +81,20 @@ public class BookService
         List<Integer> authorid = new ArrayList<>();
         authorid.add(authorId);
         dto.setAuthorId(authorid);
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
+        BookRequest bookReq = new BookRequest();
         req.setAction("Search");
-        req.setBook(dto);
+        bookReq.setBook(dto);
+        req.setData(bookReq);
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
             System.out.println("search book success");
-            if (resp.getBooks() != null)
-                books = resp.getBooks();
+            if (resp.getResult().getBooks() != null)
+                books = resp.getResult().getBooks();
         }
         return books;
     }
@@ -99,15 +102,17 @@ public class BookService
     public boolean deleteBook(int id)
     {
         System.out.println("Delete book");
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
+        BookRequest bookReq = new BookRequest();
         Book dto = new Book();
         dto.setId(id);
         req.setAction("Delete");
-        req.setBook(dto);
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        bookReq.setBook(dto);
+        req.setData(bookReq);
+
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
             return true;
@@ -118,40 +123,42 @@ public class BookService
     public boolean createBook(Book book)
     {
         System.out.println("Create book");
-        BookRequest req = new BookRequest();
+        BookRequest bookReq = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
 
         req.setAction("Create");
-        req.setBook(book);
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        bookReq.setBook(book);
+        req.setData(bookReq);
+
+        String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        BookResponse resp = (BookResponse) con.getResponse(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
         if (resp.getStatus().equals("Success"))
         {
             return true;
         }
         return false;
     }
+
     public boolean updateBook(Book book)
     {
         System.out.println("Update book: ");
-        System.out.println("=====================");
-
-        BookRequest req = new BookRequest();
+        RequestModel<BookRequest> req = new RequestModel<>();
+        BookRequest bookReq = new BookRequest();
         req.setAction("Update");
-        req.setBook(book);
+        bookReq.setBook(book);
+        req.setData(bookReq);
 
-        XmlUtils util = new XmlUtils();
-        String xmlRq = util.convertRequestToXml(req);
+        String xmlRq = util.convertObjectToXml(req);
 
         // getting response from server
-        ConnectManager connectManager = new ConnectManager();
-        ResponseModel bookResq = connectManager.getResponse(xmlRq);
-        if (bookResq instanceof BookResponse && "Success".equals(bookResq.getStatus()))
+        ConnectManager con = new ConnectManager();
+        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        if (resp.getStatus().equals("Success"))
         {
             return true;
         }
-        System.out.println(bookResq.getError());
+        System.out.println(resp.getError());
         return false;
     }
 }

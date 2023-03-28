@@ -51,33 +51,38 @@ public class ServerApp
                         xmlString += line;
                         line = reader.readLine();
                     }
+                    System.out.println(xmlString);
                     if (xmlString.length() > 0)
                     {
-                        RequestModel req = utils.convertXmlToRequest(xmlString);
+                        RequestModel req = (RequestModel) utils.convertXmlToObject(xmlString);
+                        System.out.println("Action: " + req.getAction());
                         switch (req.getAction())
                         {
                         case "Login":
-                            accountController.login(req);
+                            accountController.login(xmlString);
                             break;
                         case "GetBook":
                             bookController.getBooks();
                             break;
                         case "Create":
-                            bookController.createBook(req);
+                            bookController.createBook(xmlString);
                             break;
                         case "Search":
-                            bookController.searchBooks(req);
+                            bookController.searchBooks(xmlString);
                             break;
                         case "Update":
-                            bookController.updateBook(req);
+                            bookController.updateBook(xmlString);
                             break;
                         case "Delete":
-                            bookController.deleteBook(req);
+                            bookController.deleteBook(xmlString);
                             break;
                         case "GetAuthor":
                             bookController.getAuthor();
                             break;
                         case "GetPublisher":
+                            bookController.getPublisher();
+                            break;
+                        case "Ping":
                             bookController.getPublisher();
                             break;
                         default:
