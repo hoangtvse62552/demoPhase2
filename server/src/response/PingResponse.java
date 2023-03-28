@@ -5,20 +5,21 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "AccountResponse")
+@XmlRootElement(name = "PingResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AccountResponse 
+public class PingResponse
 {
-    @XmlElement(name = "isAdmin")
-    private boolean isAdmin;
+    @XmlElement(name = "time")
+    private String time;
 
-    public void setAdmin(boolean isAdmin)
+    public String getTime()
     {
-        this.isAdmin = isAdmin;
+        return time;
     }
 
-    public boolean isAdmin()
+    public void setTime(String time)
     {
-        return isAdmin;
+        this.time = time;
     }
+
 }

@@ -2,7 +2,6 @@ package utils;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
@@ -20,65 +19,19 @@ import response.AccountResponse;
 import response.BookResponse;
 import response.ResponseModel;
 
-public class Utils
+public class Utils<T>
 {
-    public String convertRequestToXml(RequestModel input)
+
+    public Object convertXmlToObject(String xmlString)
     {
-        String xmlResult = "";
+        Object request = null;
         try
         {
-            JAXBContext context;
-            if (input instanceof AccountRequest)
-            {
-                input = (AccountRequest) input;
-                context = JAXBContext.newInstance(AccountRequest.class);
-            }
-            else
-            {
-                input = (BookRequest) input;
-                context = JAXBContext.newInstance(BookRequest.class);
-            }
+            StringReader reader = new StringReader(xmlString);
+            JAXBContext context = JAXBContext.newInstance(RequestModel.class, AccountRequest.class, BookRequest.class, ResponseModel.class, AccountResponse.class, BookResponse.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            request = (Object) unmarshaller.unmarshal(reader);
 
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            StringWriter sw = new StringWriter();
-            marshaller.marshal(input, sw);
-            xmlResult = sw.toString();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return xmlResult;
-    }
-
-    public RequestModel convertXmlToRequest(String xmlString)
-    {
-        RequestModel request = null;
-        try
-        {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(xmlString)));
-            Element root = document.getDocumentElement();
-
-            NodeList actionNode = root.getElementsByTagName("action");
-
-            String action = actionNode.item(0).getTextContent();
-
-            // get book info
-            JAXBContext context;
-            if (action.equals("Login"))
-            {
-                context = JAXBContext.newInstance(AccountRequest.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                request = (AccountRequest) unmarshaller.unmarshal(root);
-            }
-            else
-            {
-                context = JAXBContext.newInstance(BookRequest.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                request = (BookRequest) unmarshaller.unmarshal(root);
-            }
         }
         catch (Exception e)
         {
@@ -87,55 +40,12 @@ public class Utils
         return request;
     }
 
-    public ResponseModel convertXmlToResponse(String xmlString)
-    {
-        ResponseModel response = null;
-        try
-        {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            Document document = factory.newDocumentBuilder().parse(new InputSource(new StringReader(xmlString)));
-            Element root = document.getDocumentElement();
-
-            NodeList actionNode = root.getElementsByTagName("isAdmin");
-
-            JAXBContext context;
-            if (actionNode.item(0) != null)
-            {
-                context = JAXBContext.newInstance(AccountResponse.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                response = (AccountResponse) unmarshaller.unmarshal(root);
-            }
-            else
-            {
-                context = JAXBContext.newInstance(BookResponse.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                response = (BookResponse) unmarshaller.unmarshal(root);
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println("Error convert xml to response: " + e);
-        }
-        return response;
-    }
-
-    public String convertResponseToXml(ResponseModel input)
+    public String convertObjectToXml(Object input)
     {
         String xmlResult = "";
         try
         {
-            JAXBContext context;
-            if (input instanceof AccountResponse)
-            {
-                input = (AccountResponse) input;
-                context = JAXBContext.newInstance(AccountResponse.class);
-            }
-            else
-            {
-                input = (BookResponse) input;
-                context = JAXBContext.newInstance(BookResponse.class);
-            }
-
+            JAXBContext context = JAXBContext.newInstance(ResponseModel.class, RequestModel.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
@@ -148,5 +58,4 @@ public class Utils
         }
         return xmlResult;
     }
-
 }

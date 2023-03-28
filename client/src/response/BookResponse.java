@@ -10,7 +10,7 @@ import model.*;
 
 @XmlRootElement(name = "BookResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BookResponse extends ResponseModel
+public class BookResponse
 {
     @XmlElement(name = "book")
     private List<Book>      books;

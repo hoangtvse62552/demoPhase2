@@ -21,14 +21,18 @@ public class ConnectManager {
             // getting response XML string
             StringBuilder xmlRp = new StringBuilder();
             String line = reader.readLine();
-            while (!line.isEmpty()) {
+            while (!line.isEmpty())
+            {
+                System.out.println(line);
                 xmlRp.append(line);
                 line = reader.readLine();
             }
 
             XmlUtils xmlUtil = new XmlUtils();
-            return xmlUtil.convertXmlToResponse(String.valueOf(xmlRp));
-        } catch (Exception e) {
+            return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             // ClientLogger.getInstance().writeLog(e);
         }

@@ -3,18 +3,22 @@ package controller;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import logger.ServerLogger;
 import model.Account;
 import request.AccountRequest;
 import request.RequestModel;
 import response.AccountResponse;
+import response.ResponseModel;
 import service.AccountService;
 import utils.Utils;
 
 public class AccountController
 {
-    private Utils        utils = new Utils();
-    private OutputStream os    = null;
+    private Utils<AccountResponse> utilsResponse = new Utils<>();
+    private Utils<AccountRequest>  utilsReq      = new Utils<>();
+    private OutputStream           os            = null;
 
     public AccountController(OutputStream os)
     {
@@ -22,29 +26,33 @@ public class AccountController
         this.os = os;
     }
 
-    public void login(RequestModel request)
+    public void login(String xmlString)
     {
-        AccountResponse resp = new AccountResponse();
+
+        ResponseModel<AccountResponse> resp = new ResponseModel<>();
         try
         {
-            AccountRequest req = (AccountRequest) request;
-            String username = req.getUsername();
-            String password = req.getPassword();
+            RequestModel<AccountRequest> req = (RequestModel<AccountRequest>) utilsReq.convertXmlToObject(xmlString);
+            String username = req.getData().getUsername();
+            String password = req.getData().getPassword();
 
             AccountService sv = new AccountService();
             Account dto = sv.login(username, password);
+
+            AccountResponse accResp = new AccountResponse();
 
             if (dto != null)
             {
                 resp.setError("");
                 resp.setStatus("Success");
-                resp.setAdmin(dto.isAdmin());
+                accResp.setAdmin(dto.isAdmin());
             }
             else
             {
                 resp.setStatus("Fail");
             }
-
+            resp.setAction(req.getAction());
+            resp.setResult(accResp);
         }
         catch (Exception e)
         {
@@ -57,9 +65,9 @@ public class AccountController
         }
     }
 
-    private void sendResponse(AccountResponse resp)
+    private void sendResponse(ResponseModel<AccountResponse> resp)
     {
-        String responseStr = utils.convertResponseToXml(resp);
+        String responseStr = utilsResponse.convertObjectToXml(resp);
         PrintWriter writer = new PrintWriter(os, true);
         writer.println(responseStr);
     }

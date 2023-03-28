@@ -7,7 +7,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "AccountResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AccountResponse extends ResponseModel
+public class AccountResponse
 {
     @XmlElement(name = "isAdmin")
     private boolean isAdmin;
