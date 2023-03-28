@@ -24,6 +24,7 @@ public class ServerLogger
         try
         {
             String direct = System.getProperty("user.dir");
+            System.out.println(direct);
             file = new FileHandler(direct + "/log/logfile.log");
             log.addHandler(file);
 

@@ -1,8 +1,5 @@
 package ui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,7 +10,7 @@ import controller.AccountController;
 import controller.DirectController;
 import model.Account;
 
-public class LoginPage extends JFrame implements ActionListener
+public class LoginPage extends JFrame
 {
     /**
      * 
@@ -23,13 +20,11 @@ public class LoginPage extends JFrame implements ActionListener
     private JPasswordField    txtPassword;
     private JButton           btnLogin;
     private JLabel            lbError;
-    private DirectController  directController;
 
     private final JTextField  txtError         = new JTextField();
 
-    public LoginPage(DirectController directController)
+    public LoginPage()
     {
-        this.directController = directController;
         txtError.setColumns(10);
         JLabel lbUsername = new JLabel("Username");
         lbUsername.setBounds(50, 50, 100, 20);
@@ -45,7 +40,7 @@ public class LoginPage extends JFrame implements ActionListener
 
         btnLogin = new JButton("Login");
         btnLogin.setBounds(70, 150, 150, 20);
-        btnLogin.addActionListener(this);
+        btnLogin.addActionListener(e -> loginActionPerformed());
 
         lbError = new JLabel("Error");
         lbError.setBounds(50, 170, 300, 20);
@@ -63,39 +58,22 @@ public class LoginPage extends JFrame implements ActionListener
         setSize(400, 300);
         setBounds(800, 300, 350, 250);
         setLayout(null);
-//        setVisible(true);
     }
 
-    public void actionPerformed(ActionEvent e)
+    public void loginActionPerformed()
     {
-
-        if (e.getSource() == btnLogin)
+        AccountController accountController = new AccountController(txtUsername, txtPassword, lbError);
+        Account dto = accountController.login();
+        if (dto != null)
         {
-            String password = String.valueOf(txtPassword.getPassword());
-            String username = txtUsername.getText();
-            if (!password.trim().equals("") && !username.trim().equals(""))
-            {
-                lbError.setVisible(false);
-                AccountController accController = new AccountController();
-                Account dto = accController.login(username, password);
-                if (dto != null)
-                {
-                    System.out.println("Login Successl");
-                    // chuyển map
-                    directController.login(dto.isAdmin(), this);
-                }
-                else
-                {
-                    lbError.setText("Username or Password is wrong!");
-                    lbError.setVisible(true);
-                }
-
-            }
-            else
-            {
-                lbError.setText("Username or Password can not be empty");
-                lbError.setVisible(true);
-            }
+            DirectController directController = DirectController.getInstance();
+            directController.setHomePage(new HomePage(dto.isAdmin()));
+            directController.login();
+        }
+        else
+        {
+            lbError.setText("Username or Password is wrong!");
+            lbError.setVisible(true);
         }
     }
 }

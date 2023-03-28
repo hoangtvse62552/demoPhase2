@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import controller.AccountController;
 import controller.BookController;
 import logger.ServerLogger;
@@ -22,6 +21,8 @@ public class ServerApp
     public static void main(String[] args)
     {
         System.out.println("Server is running...");
+        System.out.println(System.getProperty("user.dir"));
+
         utils = new Utils();
 
         // connect socket
@@ -30,9 +31,10 @@ public class ServerApp
 
             System.out.println("Server is listening on port " + 9090);
 
+            Socket socket;
             while (true)
             {
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
                 // get input
                 is = socket.getInputStream();
@@ -41,40 +43,39 @@ public class ServerApp
                 BookController bookController = new BookController(os);
                 try
                 {
-                    String xmlString = "";
+                    StringBuilder xmlString = new StringBuilder();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                     String line = reader.readLine();
 
                     while (line != null && !line.isEmpty())
                     {
                         System.out.println(line);
-                        xmlString += line;
+                        xmlString.append(line);
                         line = reader.readLine();
                     }
                     System.out.println(xmlString);
                     if (xmlString.length() > 0)
                     {
-                        RequestModel req = (RequestModel) utils.convertXmlToObject(xmlString);
-                        System.out.println("Action: " + req.getAction());
+                        RequestModel req = (RequestModel) utils.convertXmlToObject(xmlString.toString());
                         switch (req.getAction())
                         {
                         case "Login":
-                            accountController.login(xmlString);
+                            accountController.login(xmlString.toString());
                             break;
                         case "GetBook":
                             bookController.getBooks();
                             break;
                         case "Create":
-                            bookController.createBook(xmlString);
+                            bookController.createBook(xmlString.toString());
                             break;
                         case "Search":
-                            bookController.searchBooks(xmlString);
+                            bookController.searchBooks(xmlString.toString());
                             break;
                         case "Update":
-                            bookController.updateBook(xmlString);
+                            bookController.updateBook(xmlString.toString());
                             break;
                         case "Delete":
-                            bookController.deleteBook(xmlString);
+                            bookController.deleteBook(xmlString.toString());
                             break;
                         case "GetAuthor":
                             bookController.getAuthor();

@@ -1,49 +1,40 @@
 package controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import ui.HomePage;
 import ui.LoginPage;
-import utils.LoggerUtils;
 
 public class DirectController
 {
-    LoginPage loginPage;
-    HomePage  homePage;
+    private static volatile DirectController obj = null;
+    private @Getter @Setter LoginPage        loginPage;
+    private @Getter @Setter HomePage         homePage;
 
-    public DirectController()
+    private DirectController()
     {
-        super();
     }
 
-    public void login(boolean isAdmin, LoginPage loginPage)
+    public static DirectController getInstance()
+    {
+        if (obj == null)
+        {
+            synchronized (DirectController.class)
+            {
+                if (obj == null)
+                {
+                    obj = new DirectController();
+                }
+            }
+        }
+        return obj;
+    }
+
+    public void login()
     {
         System.out.println("DirectController: Login success");
-        this.loginPage = loginPage;
-        this.homePage = new HomePage(isAdmin, this);
         this.loginPage.setVisible(false);
         this.homePage.setVisible(true);
-    }
-
-    public void alertServerStatus(boolean isConnected)
-    {
-        if (loginPage != null && loginPage.isVisible())
-        {
-            System.out.println(loginPage);
-            LoggerUtils.alert(loginPage, "Server cannot connected!", "Warning");
-        }
-        if (homePage != null && homePage.isVisible())
-        {
-            LoggerUtils.alert(homePage, "Server cannot connected!", "Warning");
-        }
-    }
-
-    // public LoginPage getLoginPage()
-    // {
-    // return loginPage;
-    // }
-
-    public HomePage getHomePage()
-    {
-        return homePage;
     }
 
     public void logout()
