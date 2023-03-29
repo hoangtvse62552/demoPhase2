@@ -3,14 +3,17 @@ package utils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import logger.ClientLogger;
 import main.ClientConfig;
+import request.RequestModel;
 import response.ResponseModel;
 
 public class ConnectManager
 {
+
+    private final ClientLogger logger = ClientLogger.getInstance();
 //    public ResponseModel getResponse(String xmlRq)
 //    {
 //        try (Socket clientSocket = new Socket(ClientConfig.getInstance().getServerIp(), ClientConfig.getInstance().getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
@@ -48,6 +51,8 @@ public class ConnectManager
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
             // flush data to server
             writer.println(xmlRq);
+            
+            logger.writeLog(xmlRq);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -66,6 +71,9 @@ public class ConnectManager
                 xmlRp.append(line);
                 line = reader.readLine();
             }
+            
+            logger.writeLog(xmlRp.toString());
+
             XmlUtils xmlUtil = new XmlUtils();
             return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
         } catch (Exception e) {
