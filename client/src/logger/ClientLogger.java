@@ -50,5 +50,11 @@ public class ClientLogger {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        // log.info(action);
+
+        // for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+        //     log.info(stackTraceElement.toString());
+        // }
     }
 }
