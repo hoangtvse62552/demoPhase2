@@ -15,9 +15,11 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import request.AccountRequest;
 import request.BookRequest;
+import request.PingRequest;
 import request.RequestModel;
 import response.AccountResponse;
 import response.BookResponse;
+import response.PingResponse;
 import response.ResponseModel;
 
 public class XmlUtils<T>
@@ -28,7 +30,9 @@ public class XmlUtils<T>
         try
         {
             StringReader reader = new StringReader(xmlString);
-            JAXBContext context = JAXBContext.newInstance(RequestModel.class, AccountRequest.class, BookRequest.class, ResponseModel.class, AccountResponse.class, BookResponse.class);
+            JAXBContext context = JAXBContext.newInstance(RequestModel.class, AccountRequest.class, 
+                    BookRequest.class, ResponseModel.class, AccountResponse.class, 
+                    BookResponse.class, PingRequest.class, PingResponse.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             request = (Object) unmarshaller.unmarshal(reader);
 

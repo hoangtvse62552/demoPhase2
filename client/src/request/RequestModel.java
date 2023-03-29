@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "request")
-@XmlSeeAlso({ AccountRequest.class, BookRequest.class })
+@XmlSeeAlso({ AccountRequest.class, BookRequest.class, PingRequest.class })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RequestModel<D>
 {

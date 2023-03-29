@@ -1,5 +1,7 @@
 package service;
 
+import java.net.Socket;
+
 import model.Account;
 import request.AccountRequest;
 import request.RequestModel;
@@ -33,8 +35,11 @@ public class AccountService
         System.out.println(xmlRq);
         // Get connection
         ConnectManager connectManager = new ConnectManager();
+        Socket socket = connectManager.sendRequest(xmlRq);
 
-        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(xmlRq);
+        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(socket);
+        
+//        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(xmlRq);
 
         if (accountResponse != null)
         {

@@ -1,13 +1,9 @@
-client/target/
-client/bin/
-client/.settings/
+/client/target/
 
-server/target/
-server/bin/
-server/.setttings/
-server/src/configures/Config.java
+/client/log/
 
-.vscode/
+/server/target/
 
-log/
+/server/log/
 
+./vscode/

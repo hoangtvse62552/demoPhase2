@@ -2,6 +2,8 @@ package controller;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import logger.ServerLogger;
@@ -11,6 +13,7 @@ import model.Publisher;
 import request.BookRequest;
 import request.RequestModel;
 import response.BookResponse;
+import response.PingResponse;
 import response.ResponseModel;
 import service.BookService;
 import utils.Utils;
@@ -203,13 +206,10 @@ public class BookController
         BookResponse bookResp = new BookResponse();
         try
         {
-            System.out.println("Begin convert");
             RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
             Book dto = bookReq.getData().getBook();
-            System.out.println("end convert");
             BookService sv = new BookService();
             List<Book> books = sv.searchBooks(dto.getName(), dto.getAuthorId().get(0));
-            System.out.println("end  search service");
             bookResp.setBooks(books);
             resp.setResult(bookResp);
             resp.setStatus("Success");

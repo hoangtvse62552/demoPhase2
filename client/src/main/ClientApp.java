@@ -14,6 +14,8 @@ public class ClientApp
         DirectController directController = DirectController.getInstance();
         directController.setLoginPage(loginPage);
 
+        ClientConfig.getInstance().loadConfig();
+
         // New simultaneously thread. It is used to test connection between client and server.
         new Thread()
         {

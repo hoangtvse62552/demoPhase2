@@ -26,12 +26,6 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.4</version>
 		</dependency>
-		<!-- Manage connection pool jdbc -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>5.0.1</version>
-		 </dependency>
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>

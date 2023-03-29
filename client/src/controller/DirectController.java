@@ -39,7 +39,29 @@ public class DirectController
 
     public void logout()
     {
-        loginPage.setVisible(true);
+        loginPage.setVisible(true)                  ;
         homePage.setVisible(false);
     }
+
+    public LoginPage getLoginPage()
+    {
+        return loginPage;
+    }
+
+    public void setLoginPage(LoginPage loginPage)
+    {
+        this.loginPage = loginPage;
+    }
+
+    public HomePage getHomePage()
+    {
+        return homePage;
+    }
+
+    public void setHomePage(HomePage homePage)
+    {
+        this.homePage = homePage;
+    }
+    
+    
 }
