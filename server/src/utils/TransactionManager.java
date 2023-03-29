@@ -12,8 +12,16 @@ public class TransactionManager extends HikariDataSource
 {
     private static volatile TransactionManager transactionManager = null;
 
+    private final HikariDataSource             dataSource;
+
     private TransactionManager()
     {
+        dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl("jdbc:db2://" + "localhost:50002" + "/" + "demo2");
+        dataSource.setUsername("db2inst1");
+        dataSource.setPassword("Nqh1999@");
+        dataSource.setMaximumPoolSize(10);
+        dataSource.setAutoCommit(false);
     };
 
     public static TransactionManager getInstance()
@@ -24,22 +32,20 @@ public class TransactionManager extends HikariDataSource
             {
                 if (transactionManager == null)
                 {
-                    
-                    HikariConfig config = new HikariConfig();
-                    config.setJdbcUrl("jdbc:db2://" + "localhost:50002" + "/" + "demo2");
-                    config.setUsername("db2inst1");
-                    config.setPassword("Nqh1999@");
-                    // transactionManager.setJdbcUrl();
-                    // transactionManager.setUsername("db2inst1");
-                    // transactionManager.setPassword("Nqh1999@");
-                    // transactionManager.setDataSourceClassName("com.ibm.db2.jcc.DB2SimpleDataSource");
-                    transactionManager = new TransactionManager(config);
-                    transactionManager.setMaximumPoolSize(10);
-                    transactionManager.setAutoCommit(false);
+                    transactionManager = new TransactionManager();
                 }
             }
         }
         return transactionManager;
+    }
+
+    public Connection getTransaction() throws SQLException
+    {
+        return dataSource.getConnection();
+    }
+
+    public void shutdownPool() {
+        dataSource.close();
     }
 
     public void closeConnection(Connection con, PreparedStatement stm, ResultSet rs)
