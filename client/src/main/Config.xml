@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config> 
+	<ServerIp>127.0.0.1</ServerIp>
+	<ServerPort>9090</ServerPort>
+</Config>

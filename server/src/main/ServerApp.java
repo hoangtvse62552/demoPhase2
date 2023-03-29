@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import configures.ServerConfig;
 import controller.AccountController;
 import controller.BookController;
+import controller.PingController;
 import logger.ServerLogger;
 import request.RequestModel;
 import utils.Utils;
@@ -22,7 +25,7 @@ public class ServerApp
     {
         System.out.println("Server is running...");
         System.out.println(System.getProperty("user.dir"));
-
+        ServerConfig.getInstance().loadConfig();
         utils = new Utils();
 
         // connect socket
@@ -41,6 +44,7 @@ public class ServerApp
                 os = socket.getOutputStream();
                 AccountController accountController = new AccountController(os);
                 BookController bookController = new BookController(os);
+                PingController pingController = new PingController(os);
                 try
                 {
                     StringBuilder xmlString = new StringBuilder();
@@ -84,7 +88,7 @@ public class ServerApp
                             bookController.getPublisher();
                             break;
                         case "Ping":
-                            bookController.getPublisher();
+                            pingController.ping();
                             break;
                         default:
                             throw new IllegalArgumentException("Unexpected value: " + req.getAction());
