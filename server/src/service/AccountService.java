@@ -25,7 +25,7 @@ public class AccountService
 
         try
         {
-            con = transactionManager.getConnection();
+            con = transactionManager.getTransaction();
             String sql = "SELECT * FROM ACCOUNTS WHERE username = ?";
             stm = con.prepareStatement(sql);
             stm.setString(1, username);

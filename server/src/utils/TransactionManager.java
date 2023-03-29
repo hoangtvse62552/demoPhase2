@@ -5,10 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class TransactionManager extends HikariDataSource
+public class TransactionManager
 {
     private static volatile TransactionManager transactionManager = null;
 
@@ -44,7 +43,8 @@ public class TransactionManager extends HikariDataSource
         return dataSource.getConnection();
     }
 
-    public void shutdownPool() {
+    public void shutdownPool()
+    {
         dataSource.close();
     }
 
