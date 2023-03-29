@@ -9,32 +9,35 @@ import java.net.Socket;
 import main.ClientConfig;
 import response.ResponseModel;
 
-public class ConnectManager {
-    public ResponseModel getResponse(String xmlRq) {
-        try (Socket clientSocket = new Socket(ClientConfig.getInstance().getServerIp(),
-                ClientConfig.getInstance().getServerPort());
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));) {
-            // flush data to server
-            writer.println(xmlRq);
-
-            // getting response XML string
-            StringBuilder xmlRp = new StringBuilder();
-            String line = reader.readLine();
-            while (!line.isEmpty()) {
-                System.out.println(line);
-                xmlRp.append(line);
-                line = reader.readLine();
-            }
-
-            XmlUtils xmlUtil = new XmlUtils();
-            return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
-        } catch (Exception e) {
-            e.printStackTrace();
-            // ClientLogger.getInstance().writeLog(e);
-        }
-        return null;
-    }
+public class ConnectManager
+{
+//    public ResponseModel getResponse(String xmlRq)
+//    {
+//        try (Socket clientSocket = new Socket(ClientConfig.getInstance().getServerIp(), ClientConfig.getInstance().getServerPort()); PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
+//        {
+//            // flush data to server
+//            writer.println(xmlRq);
+//
+//            // getting response XML string
+//            StringBuilder xmlRp = new StringBuilder();
+//            String line = reader.readLine();
+//            while (!line.isEmpty())
+//            {
+//                System.out.println(line);
+//                xmlRp.append(line);
+//                line = reader.readLine();
+//            }
+//
+//            XmlUtils xmlUtil = new XmlUtils();
+//            return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            // ClientLogger.getInstance().writeLog(e);
+//        }
+//        return null;
+//    }
 
     public Socket sendRequest(String xmlRq) {
         Socket clientSocket = null;

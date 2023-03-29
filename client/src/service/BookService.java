@@ -1,5 +1,6 @@
 package service;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             books = resp.getResult().getBooks();
@@ -46,7 +48,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             publishers = resp.getResult().getPublishers();
@@ -63,7 +66,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             authors = resp.getResult().getAuthors();
@@ -89,7 +93,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             System.out.println("search book success");
@@ -112,7 +117,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             return true;
@@ -132,7 +138,8 @@ public class BookService
 
         String xmlRq = util.convertObjectToXml(req);
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             return true;
@@ -153,7 +160,8 @@ public class BookService
 
         // getting response from server
         ConnectManager con = new ConnectManager();
-        ResponseModel<BookResponse> resp = con.getResponse(xmlRq);
+        Socket socket = con.sendRequest(xmlRq);
+        ResponseModel<BookResponse> resp = con.getResponse(socket);
         if (resp.getStatus().equals("Success"))
         {
             return true;

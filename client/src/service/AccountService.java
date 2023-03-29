@@ -20,7 +20,7 @@ public class AccountService
 {
     public Account login(String username, String password)
     {
-        Account account = new Account();
+        Account account = null;
 
         RequestModel<AccountRequest> rq = new RequestModel<>();
         AccountRequest accountReq = new AccountRequest();
@@ -38,11 +38,12 @@ public class AccountService
         Socket socket = connectManager.sendRequest(xmlRq);
 
         ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(socket);
-        
+
 //        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(xmlRq);
 
         if (accountResponse != null)
         {
+            account = new Account();
             if ("Success".equals(accountResponse.getStatus()))
             {
                 account.setAdmin(accountResponse.getResult().isAdmin());
