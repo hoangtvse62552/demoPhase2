@@ -71,7 +71,7 @@ public class HomePage extends JFrame
 
     private JComboBox<String>            cbAuthorFilter;
     private DefaultComboBoxModel<String> cbAuthorModelFilter;
-    private DirectController             controller;
+    private DirectController             directController = DirectController.getInstance();
     private JButton                      btnDelete;
 
     private JLabel                       lbName;
@@ -82,10 +82,9 @@ public class HomePage extends JFrame
     /**
      * Create the frame.
      */
-    public HomePage(boolean isAdmin, DirectController controller)
+    public HomePage(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
-        this.controller = controller;
         sv = new BookController();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,7 +129,7 @@ public class HomePage extends JFrame
         cbAuthor = new JComboBox<String>()
         {
 
-            @Override
+			@Override
             public void setPopupVisible(boolean v)
             {
                 if (v)
@@ -253,7 +252,7 @@ public class HomePage extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                controller.logout();
+                directController.logout();
             }
         });
         btnUpdate.addActionListener(new ActionListener()
@@ -355,7 +354,7 @@ public class HomePage extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int option = LoggerUtils.alertConfirm(controller.getHomePage(), "Are u sure about that", "");
+                int option = LoggerUtils.alertConfirm(directController.getHomePage(), "Are u sure about that", "");
                 if (option == JOptionPane.YES_OPTION)
                 {
                     boolean rs = sv.deleteBook(currentEdit.getId());
@@ -372,7 +371,6 @@ public class HomePage extends JFrame
             @Override
             public void mouseReleased(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
@@ -401,21 +399,18 @@ public class HomePage extends JFrame
             @Override
             public void mouseExited(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseEntered(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                // TODO Auto-generated method stub
 
             }
         });
