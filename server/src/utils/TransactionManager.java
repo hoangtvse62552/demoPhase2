@@ -23,14 +23,10 @@ public class TransactionManager
         dataSource.setAutoCommit(false);
     };
 
-    public static TransactionManager getInstance()
-    {
-        if (transactionManager == null)
-        {
-            synchronized (TransactionManager.class)
-            {
-                if (transactionManager == null)
-                {
+    public static TransactionManager getInstance() {
+        if (transactionManager == null) {
+            synchronized (TransactionManager.class) {
+                if (transactionManager == null) {
                     transactionManager = new TransactionManager();
                 }
             }
