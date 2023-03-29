@@ -40,7 +40,10 @@ public class LoginPage extends JFrame
 
         btnLogin = new JButton("Login");
         btnLogin.setBounds(70, 150, 150, 20);
-        btnLogin.addActionListener(e -> loginActionPerformed());
+        btnLogin.addActionListener(e -> {
+            loginActionPerformed();
+            System.out.println("event occurs.");
+        });
 
         lbError = new JLabel("Error");
         lbError.setBounds(50, 170, 300, 20);
