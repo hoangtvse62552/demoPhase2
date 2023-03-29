@@ -5,7 +5,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
-import jakarta.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "request")
 @XmlSeeAlso({ AccountRequest.class, BookRequest.class, PingRequest.class })

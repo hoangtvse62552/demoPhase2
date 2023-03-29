@@ -129,7 +129,7 @@ public class HomePage extends JFrame
         cbAuthor = new JComboBox<String>()
         {
 
-			@Override
+            @Override
             public void setPopupVisible(boolean v)
             {
                 if (v)

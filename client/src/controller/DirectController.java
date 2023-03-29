@@ -1,15 +1,13 @@
 package controller;
 
-import lombok.Getter;
-import lombok.Setter;
 import ui.HomePage;
 import ui.LoginPage;
 
 public class DirectController
 {
     private static volatile DirectController obj = null;
-    private @Getter @Setter LoginPage        loginPage;
-    private @Getter @Setter HomePage         homePage;
+    private LoginPage                        loginPage;
+    private HomePage                         homePage;
 
     private DirectController()
     {
@@ -39,7 +37,7 @@ public class DirectController
 
     public void logout()
     {
-        loginPage.setVisible(true)                  ;
+        loginPage.setVisible(true);
         homePage.setVisible(false);
     }
 
@@ -62,6 +60,5 @@ public class DirectController
     {
         this.homePage = homePage;
     }
-    
-    
+
 }

@@ -2,12 +2,6 @@ package utils;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
