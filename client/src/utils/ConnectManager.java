@@ -42,6 +42,64 @@ public class ConnectManager
         return null;
     }
 
+    public Socket sendRequest(String xmlRq)
+    {
+        ServerCfg serverCfg = new ServerCfg();
+        Socket clientSocket = null;
+        PrintWriter writer = null;
+        try
+        {
+            clientSocket = new Socket(serverCfg.getServerIp(), serverCfg.getServerPort());
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            // flush data to server
+            writer.println(xmlRq);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ClientLogger.getInstance().writeLog(e);
+        }
+        return clientSocket;
+    }
+
+    public ResponseModel getResponse(Socket clientSocket)
+    {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));)
+        {
+            // getting response XML string
+            StringBuilder xmlRp = new StringBuilder();
+            String line = reader.readLine();
+            while (!line.isEmpty())
+            {
+                System.out.println(line);
+                xmlRp.append(line);
+                line = reader.readLine();
+            }
+            XmlUtils xmlUtil = new XmlUtils();
+            return (ResponseModel) xmlUtil.convertXmlToObject(String.valueOf(xmlRp));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            ClientLogger.getInstance().writeLog(e);
+        }
+        finally
+        {
+            try
+            {
+                if (clientSocket != null)
+                {
+                    clientSocket.close();
+                }
+            }
+            catch (Exception e2)
+            {
+                ClientLogger.getInstance().writeLog(e2);
+            }
+        }
+        return null;
+    }
+
     public boolean pingServer()
     {
         ServerCfg serverCfg = new ServerCfg();
