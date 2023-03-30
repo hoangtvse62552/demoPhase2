@@ -2,8 +2,6 @@ package controller;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import logger.ServerLogger;
@@ -13,7 +11,6 @@ import model.Publisher;
 import request.BookRequest;
 import request.RequestModel;
 import response.BookResponse;
-import response.PingResponse;
 import response.ResponseModel;
 import service.BookService;
 import utils.Utils;
