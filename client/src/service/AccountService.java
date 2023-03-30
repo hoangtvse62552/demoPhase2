@@ -39,7 +39,8 @@ public class AccountService
 
         ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(socket);
 
-//        ResponseModel<AccountResponse> accountResponse = connectManager.getResponse(xmlRq);
+        // ResponseModel<AccountResponse> accountResponse =
+        // connectManager.getResponse(xmlRq);
 
         if (accountResponse != null)
         {

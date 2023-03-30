@@ -2,9 +2,11 @@ package service;
 
 import java.net.Socket;
 
+import logger.ClientLogger;
 import request.PingRequest;
 import request.RequestModel;
 import utils.ConnectManager;
+import utils.DatetimeUtils;
 import utils.XmlUtils;
 
 /**
@@ -13,11 +15,15 @@ import utils.XmlUtils;
  */
 public class ServerService {
 
+    private final ClientLogger logger = ClientLogger.getInstance();
+
     /**
      * Test server connection.
+     * 
      * @return true if have connection, or false if on the opposite.
      */
     public boolean pingServer() {
+
         ConnectManager connectManager = new ConnectManager();
 
         RequestModel<PingRequest> rq = new RequestModel<>();
@@ -28,6 +34,11 @@ public class ServerService {
         String xmlRq = util.convertObjectToXml(rq);
         Socket socket = connectManager.sendRequest(xmlRq);
 
-        return socket == null ? false : true;
+        if (socket == null) {
+            logger.writeLog(new NullPointerException("Server is down at: " + DatetimeUtils.getCurrentDateTime()));
+            return false;
+        }
+
+        return true;
     }
 }
