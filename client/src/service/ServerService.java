@@ -11,7 +11,6 @@ import utils.XmlUtils;
 
 /**
  * Manage the connection between server and client
- * Don't log exception when server is down.
  */
 public class ServerService {
 

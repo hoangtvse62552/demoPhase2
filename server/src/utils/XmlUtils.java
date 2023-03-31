@@ -15,7 +15,7 @@ import response.BookResponse;
 import response.PingResponse;
 import response.ResponseModel;
 
-public class Utils<T>
+public class XmlUtils<T>
 {
 
     public Object convertXmlToObject(String xmlString)

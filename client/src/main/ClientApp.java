@@ -4,11 +4,9 @@ import controller.DirectController;
 import controller.ServerController;
 import ui.LoginPage;
 
-public class ClientApp
-{
+public class ClientApp {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         LoginPage loginPage = new LoginPage();
         loginPage.setVisible(true);
         DirectController directController = DirectController.getInstance();
@@ -16,25 +14,20 @@ public class ClientApp
 
         ClientConfig.getInstance().loadConfig();
 
-        // New simultaneously thread. It is used to test connection between client and server.
-        new Thread()
-        {
-            public void run()
-            {
+        // New simultaneously thread. It is used to test connection between client and
+        // server.
+        new Thread() {
+            public void run() {
                 System.out.println("Main app: ==============");
                 System.out.println(directController.getHomePage());
                 ServerController serverController = new ServerController();
-                while (true)
-                {
+                while (true) {
                     serverController.setLoginPage(loginPage);
                     serverController.setHomePage(directController.getHomePage());
                     serverController.pingServer();
-                    try
-                    {
+                    try {
                         Thread.sleep(5000);
-                    }
-                    catch (InterruptedException e)
-                    {
+                    } catch (InterruptedException e) {
                         // ClientLogger.getInstance().writeLog(e);
                         e.printStackTrace();
                     }

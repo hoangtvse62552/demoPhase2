@@ -1,31 +1,37 @@
 package utils;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Support date-time features. Take server (date-time in a specified UTC
  * timezone) time as the standard.
  * 
  */
-public class DatetimeUtils {
+public class DatetimeUtils
+{
 
     /**
      * Get current date-time at Ho Chi Minh city, Viet Nam
-     * @return String: formatted in #ISO_DATE_TIME
+     * 
+     * @return long: timestamp in miliseconds
      */
-    public static String getCurrentDateTime() {
-        // Create formatter for ISO date-time
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    public static Long getCurrentDateTime()
+    {
+        Date now = new Date();
 
-        // Get the current date-time in the ICT timezone
-        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
-        ZonedDateTime dateTime = ZonedDateTime.now(zoneId);
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
 
-        // Format the date-time using the formatter
-        String formattedDateTime = formatter.format(dateTime);
+        return now.getTime();
+    }
 
-        return formattedDateTime;
+    public static String getCurrentDateTime(Long datetime)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z");
+
+        Date date = new Date(datetime);
+
+        return formatter.format(date);
     }
 }
