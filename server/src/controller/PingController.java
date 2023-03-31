@@ -8,11 +8,11 @@ import java.util.Calendar;
 import logger.ServerLogger;
 import response.PingResponse;
 import response.ResponseModel;
-import utils.Utils;
+import utils.XmlUtils;
 
 public class PingController
 {
-    private Utils<PingResponse> utilsResponse = new Utils<>();
+    private XmlUtils<PingResponse> utilsResponse = new XmlUtils<>();
     private OutputStream        os            = null;
 
     public PingController(OutputStream os)

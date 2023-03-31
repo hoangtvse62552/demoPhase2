@@ -15,30 +15,36 @@ import controller.BookController;
 import controller.PingController;
 import logger.ServerLogger;
 import request.RequestModel;
-import utils.Utils;
+import utils.XmlUtils;
 
-public class ServerApp {
+public class ServerApp
+{
 
-    private static volatile boolean isStopped;
+    private static volatile boolean      isStopped;
 
-    private static ServerSocket server;
+    private static ServerSocket          server;
 
     private static final ExecutorService threadPool = Executors.newCachedThreadPool();
 
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args)
+    {
+        try
+        {
             server = new ServerSocket(9090);
             server.setSoTimeout(0);
             server.setReuseAddress(true);
             System.out.println("Server is running ...");
 
             Socket client;
-            while (!isStopped) {
+            while (!isStopped)
+            {
                 client = server.accept();
                 System.out.println("New client connected: " + client.getInetAddress().getHostAddress());
                 threadPool.execute(new ClientHandler(client));
             }
-        } catch (IOException e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             ServerLogger.getInstance().writeLog(e);
         }
@@ -50,16 +56,21 @@ public class ServerApp {
      * If server is null, then only shut down thread pool.
      * Write log into log file if occurs an Exception.
      */
-    public synchronized void stop() {
+    public synchronized void stop()
+    {
         isStopped = true;
-        if (server != null) {
-            try {
+        if (server != null)
+        {
+            try
+            {
                 server.close();
                 System.out.println("Power off server ...");
 
                 threadPool.shutdown();
                 System.out.println("Shut down thread pool ...");
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 ServerLogger.getInstance().writeLog(e);
                 e.printStackTrace();
             }
@@ -72,71 +83,78 @@ public class ServerApp {
      * Binding client socket to handle XML request and then depend on request's
      * action to invoke correcsponding controller handle method.
      */
-    private static class ClientHandler implements Runnable {
+    private static class ClientHandler implements Runnable
+    {
         private final Socket clientSocket;
 
-        public ClientHandler(Socket socket) {
+        public ClientHandler(Socket socket)
+        {
             this.clientSocket = socket;
         }
 
-        public void run() {
+        public void run()
+        {
             System.out.println("Hanle ...");
             AccountController accountController = null;
             BookController bookController = null;
             PingController pingController = null;
 
             StringBuilder xmlString = new StringBuilder();
-            try (OutputStream os = clientSocket.getOutputStream();
-                    InputStream is = clientSocket.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            try (OutputStream os = clientSocket.getOutputStream(); InputStream is = clientSocket.getInputStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is)))
+            {
                 accountController = new AccountController(os);
                 bookController = new BookController(os);
                 pingController = new PingController(os);
 
                 String line = reader.readLine();
-                while (line != null && !line.isEmpty()) {
+                while (line != null && !line.isEmpty())
+                {
                     xmlString.append(line);
                     line = reader.readLine();
                 }
                 System.out.println(xmlString.toString());
 
-                Utils utils = new Utils();
-                if (xmlString.length() > 0) {
+                XmlUtils utils = new XmlUtils();
+                if (xmlString.length() > 0)
+                {
                     RequestModel req = (RequestModel) utils.convertXmlToObject(xmlString.toString());
-                    switch (req.getAction()) {
-                        case "Login":
-                            accountController.login(xmlString.toString());
-                            break;
-                        case "GetBook":
-                            bookController.getBooks();
-                            break;
-                        case "Create":
-                            bookController.createBook(xmlString.toString());
-                            break;
-                        case "Search":
-                            bookController.searchBooks(xmlString.toString());
-                            break;
-                        case "Update":
-                            bookController.updateBook(xmlString.toString());
-                            break;
-                        case "Delete":
-                            bookController.deleteBook(xmlString.toString());
-                            break;
-                        case "GetAuthor":
-                            bookController.getAuthor();
-                            break;
-                        case "GetPublisher":
-                            bookController.getPublisher();
-                            break;
-                        case "Ping":
-                            pingController.ping();
-                            break;
-                        default:
-                            System.err.println("Unexpected value: " + req.getAction());
-                            throw new IllegalArgumentException("Unexpected value: " + req.getAction());
+                    switch (req.getAction())
+                    {
+                    case "Login":
+                        accountController.login(xmlString.toString());
+                        break;
+                    case "GetBook":
+                        bookController.getBooks();
+                        break;
+                    case "Create":
+                        bookController.createBook(xmlString.toString());
+                        break;
+                    case "Search":
+                        bookController.searchBooks(xmlString.toString());
+                        break;
+                    case "Update":
+                        bookController.updateBook(xmlString.toString());
+                        break;
+                    case "Delete":
+                        bookController.deleteBook(xmlString.toString());
+                        break;
+                    case "GetAuthor":
+                        bookController.getAuthor();
+                        break;
+                    case "GetPublisher":
+                        bookController.getPublisher();
+                        break;
+                    case "Ping":
+                        pingController.ping();
+                        break;
+                    default:
+                        System.err.println("Unexpected value: " + req.getAction());
+                        throw new IllegalArgumentException("Unexpected value: " + req.getAction());
                     }
                 }
-            } catch (IOException e) {
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
                 ServerLogger.getInstance().writeLog(e);
             }

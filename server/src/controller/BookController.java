@@ -13,13 +13,13 @@ import request.RequestModel;
 import response.BookResponse;
 import response.ResponseModel;
 import service.BookService;
-import utils.Utils;
+import utils.XmlUtils;
 
 public class BookController
 {
-    private Utils<BookResponse> utilsResponse = new Utils<>();
-    private Utils<BookRequest>  utilsReq      = new Utils<>();
-    private OutputStream        os            = null;
+    private XmlUtils<BookResponse> utilsResponse = new XmlUtils<>();
+    private XmlUtils<BookRequest>  utilsReq      = new XmlUtils<>();
+    private OutputStream           os            = null;
 
     public BookController(OutputStream os)
     {
@@ -204,6 +204,7 @@ public class BookController
         try
         {
             RequestModel<BookRequest> bookReq = (RequestModel<BookRequest>) utilsReq.convertXmlToObject(xmlString);
+            
             Book dto = bookReq.getData().getBook();
             BookService sv = new BookService();
             List<Book> books = sv.searchBooks(dto.getName(), dto.getAuthorId().get(0));

@@ -3,8 +3,6 @@ package controller;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Unmarshaller;
 import logger.ServerLogger;
 import model.Account;
 import request.AccountRequest;
@@ -12,13 +10,13 @@ import request.RequestModel;
 import response.AccountResponse;
 import response.ResponseModel;
 import service.AccountService;
-import utils.Utils;
+import utils.XmlUtils;
 
 public class AccountController
 {
-    private Utils<AccountResponse> utilsResponse = new Utils<>();
-    private Utils<AccountRequest>  utilsReq      = new Utils<>();
-    private OutputStream           os            = null;
+    private XmlUtils<AccountResponse> utilsResponse = new XmlUtils<>();
+    private XmlUtils<AccountRequest>  utilsReq      = new XmlUtils<>();
+    private OutputStream              os            = null;
 
     public AccountController(OutputStream os)
     {
